@@ -65,6 +65,14 @@ st.markdown("""
         border-color: var(--border-dark) !important;
     }
 
+    /* Ajuste para inputs dentro da Sidebar (texto legível) */
+    section[data-testid="stSidebar"] div[data-baseweb="input"] input, 
+    section[data-testid="stSidebar"] div[data-baseweb="select"] span,
+    section[data-testid="stSidebar"] .stNumberInput input, 
+    section[data-testid="stSidebar"] .stTextInput input {
+        color: #202632 !important;
+    }
+
     /* Tipografia Global unificada em Inter */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif !important;
@@ -73,7 +81,7 @@ st.markdown("""
         letter-spacing: -0.02em;
     }
 
-    /* Inputs e Controles */
+    /* Inputs e Controles do Conteúdo Principal */
     div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
         background-color: var(--surface) !important;
         border-radius: var(--radius-input) !important;
@@ -103,7 +111,7 @@ st.markdown("""
         box-shadow: 0 1px 3px rgba(31, 38, 50, 0.04);
     }
 
-    /* Cards de Métricas Compactos (Alta Densidade) */
+    /* Cards de Métricas Compactos */
     [data-testid="stMetric"] {
         background-color: var(--surface) !important;
         padding: 18px 20px !important;
