@@ -174,7 +174,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- INICIALIZAÇÃO DE DADOS NO SESSION STATE ---
+# --- INICIALIZAÇÃO DE DADOS PERSISTENTES NO SESSION STATE ---
 if 'usuarios' not in st.session_state:
     st.session_state['usuarios'] = {
         "admin": {"senha": "muller2026", "nome": "Muller Oliveira", "tipo": "admin"},
@@ -213,11 +213,14 @@ if st.session_state['usuario_logado'] is None:
                 entrar = st.form_submit_button("Acessar plataforma", type="primary", use_container_width=True)
                 
                 if entrar:
-                    if usuario_input in st.session_state['usuarios'] and st.session_state['usuarios'][usuario_input]['senha'] == senha_input:
-                        st.session_state['usuario_logado'] = usuario_input
+                    # Limpa espaços em branco acidentais no login
+                    u_clean = usuario_input.strip()
+                    s_clean = senha_input.strip()
+                    if u_clean in st.session_state['usuarios'] and st.session_state['usuarios'][u_clean]['senha'] == s_clean:
+                        st.session_state['usuario_logado'] = u_clean
                         st.rerun()
                     else:
-                        st.error("Credenciais inválidas.")
+                        st.error("Credenciais inválidas. Verifique usuário e senha.")
                         
         with aba_rec:
             st.markdown("<p style='font-size: 13px; color: #6E7684; margin-top: 10px;'>Solicite o reestabelecimento ao administrador.</p>", unsafe_allow_html=True)
@@ -314,14 +317,16 @@ if is_admin and st.session_state.get('modo_gerenciar', False):
             salvar_escritorio = st.form_submit_button("Criar acesso", type="primary", use_container_width=True)
             
             if salvar_escritorio:
-                if novo_id and novo_nome and nova_senha:
-                    st.session_state['usuarios'][novo_id] = {"senha": nova_senha, "nome": novo_nome, "tipo": "cliente"}
-                    if novo_nome not in st.session_state['base_dados_geral']:
-                        st.session_state['base_dados_geral'][novo_nome] = {}
-                    st.success(f"Escritório '{novo_nome}' criado com sucesso!")
-                    st.rerun()
+                u_id_clean = novo_id.strip()
+                n_nome_clean = novo_nome.strip()
+                n_senha_clean = nova_senha.strip()
+                if u_id_clean and n_nome_clean and n_senha_clean:
+                    st.session_state['usuarios'][u_id_clean] = {"senha": n_senha_clean, "nome": n_nome_clean, "tipo": "cliente"}
+                    if n_nome_clean not in st.session_state['base_dados_geral']:
+                        st.session_state['base_dados_geral'][n_nome_clean] = {}
+                    st.success(f"Escritório '{n_nome_clean}' (Usuário: {u_id_clean}) criado com sucesso!")
                 else:
-                    st.error("Preencha todos os campos.")
+                    st.error("Preencha todos os campos corretamente.")
 
     with col_g2:
         with st.form("del_escritorio_main"):
@@ -519,7 +524,6 @@ else:
 
     for chave in chaves_numericas:
         if chave == 'nps':
-            # média simples para nps se houver valores
             vals = [semana.get(chave, 0.0) for semana in historico_mes.values() if semana.get(chave, 0.0) > 0]
             totais_mes[chave] = sum(vals) / len(vals) if vals else 0.0
         else:
