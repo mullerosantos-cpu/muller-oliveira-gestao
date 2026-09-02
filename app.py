@@ -650,7 +650,7 @@ else:
                 st.success(f"Dados da **{semana_atual}** salvos com sucesso.")
                 st.rerun()
 
-    # --- CONSOLIDAÇÃO MENSAL COMPLETA E DETALHADA ---
+    # --- CONSOLIDAÇÃO MENSAL FIDELIZADA ---
     totais_mes = {}
     chaves_numericas = [
         'leads', 'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada', 'comercial_cancelados',
@@ -717,28 +717,37 @@ else:
         c4.metric("Recebido Efetivo", f"R$ {totais_mes['recebido']:,.2f}")
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### 1. Comercial & Vendas")
+        st.markdown("#### 1. Comercial & Vendas (Acumulado)")
         f1, f2, f3, f4 = st.columns(4, gap="medium")
-        f1.metric("Total Leads", totais_mes['leads'])
-        f2.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
-        f3.metric("Receita Contratada", f"R$ {totais_mes['receita_contratada']:,.2f}")
+        f1.metric("Contratos Fechados", totais_mes['contratos'])
+        f2.metric("Total Leads", totais_mes['leads'])
+        f3.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
         f4.metric("Cancelados / Desistências", totais_mes['comercial_cancelados'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### 2. Produção Operacional Administrativa (INSS) - Acumulado do Mês")
         op_a1, op_a2, op_a3, op_a4 = st.columns(4, gap="medium")
         op_a1.metric("Protocolos INSS Totais", totais_mes['inss_geral'])
-        op_a2.metric("Perícias Realizadas (Adm)", totais_mes['adm_pericia_realizada'])
-        op_a3.metric("Exigências Cumpridas", totais_mes['adm_exig_cumpridas'])
-        op_a4.metric("Enviados ao Judicial", totais_mes['adm_enviados_judicial'])
+        # Calculando o somatório total de deferidos e indeferidos do adm no mês
+        total_adm_def = sum([totais_mes.get(k, 0) for k in totais_mes if 'inss_' in k and '_def' in k])
+        total_adm_ind = sum([totais_mes.get(k, 0) for k in totais_mes if 'inss_' in k and '_ind' in k])
+        op_a2.metric("Deferidos (Adm)", total_adm_def)
+        op_a3.metric("Indeferidos (Adm)", total_adm_ind)
+        op_a4.metric("Retrabalho (Adm)", totais_mes['adm_retrabalho'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### 3. Produção Operacional Judicial - Acumulado do Mês")
         op_j1, op_j2, op_j3, op_j4 = st.columns(4, gap="medium")
-        op_j1.metric("Protocolos Judiciais Totais", totais_mes['judicial_iniciais'])
-        op_j2.metric("Sentenças Procedentes", totais_mes['sentecas_proc'])
-        op_j3.metric("Sentenças Improcedentes", totais_mes['sentecas_improc'])
-        op_j4.metric("Recursos Providos", totais_mes['judicial_rec_providos'])
+        op_j1.metric("Recursos Improvidos", totais_mes['judicial_rec_improvidos'])
+        op_j2.metric("Extinto sem Resolução", totais_mes['judicial_extinto'])
+        op_j3.metric("Acordos Homologados", totais_mes['acordos_homologados'])
+        op_j4.metric("Perícias Realizadas (Judicial)", totais_mes['judicial_pericia_realizada'])
+
+        op_j5, op_j6, op_j7, op_j8 = st.columns(4, gap="medium")
+        op_j5.metric("Prazos no Fatal", totais_mes['prazos_fatal'])
+        op_j6.metric("Prazos Perdidos", totais_mes['prazos_perdidos'])
+        op_j7.metric("Reprotocolos", totais_mes['judicial_retrabalho'])
+        op_j8.metric("Protocolos Iniciais Judiciais", totais_mes['judicial_iniciais'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### 4. Sucesso do Cliente & Qualidade")
