@@ -225,11 +225,13 @@ user_atual = st.session_state['usuario_logado']
 dados_user = st.session_state['usuarios'][user_atual]
 is_admin = dados_user['tipo'] == 'admin'
 
+tipo_usuario_str = 'Administrador' if is_admin else 'Cliente Corporativo'
+
 st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 4px;'>Sessão ativa</div>", unsafe_allow_html=True)
 st.sidebar.markdown(f"""
     <div style="background-color: #152238; border: 1px solid #26354D; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;">
         <div style="font-size: 13px; font-weight: 500; color: #F2F4F7;">{dados_user['nome']}</div>
-        <div style="font-size: 11px; color: #98A4B5; margin-top: 2px;">{'Administrador' : 'Cliente Corporativo'}</div>
+        <div style="font-size: 11px; color: #98A4B5; margin-top: 2px;">{tipo_usuario_str}</div>
     </div>
 """, unsafe_allow_html=True)
 
