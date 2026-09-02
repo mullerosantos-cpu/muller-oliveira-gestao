@@ -430,6 +430,7 @@ else:
                 qualificados = st.number_input("Contratos qualificados gerais", value=int(dados_semana_salvos.get('qualificados', 0)))
                 contratos = st.number_input("Contratos fechados (Vendido)", value=int(dados_semana_salvos.get('contratos', 0)))
                 receita_contratada = st.number_input("Receita contratada (R$)", value=float(dados_semana_salvos.get('receita_contratada', 0.0)))
+                comercial_cancelados = st.number_input("Comercial: Quantidade de Cancelados / Desistências", value=int(dados_semana_salvos.get('comercial_cancelados', 0)))
                 
                 st.markdown("#### Operacional Administrativo (INSS)")
                 inss_geral = st.number_input("Protocolos Adm. INSS Totais", value=int(dados_semana_salvos.get('inss_geral', 0)))
@@ -461,6 +462,7 @@ else:
                 
                 adm_enviados_judicial = st.number_input("Adm: Enviados ao Judicial", value=int(dados_semana_salvos.get('adm_enviados_judicial', 0)))
                 adm_retrabalho = st.number_input("Adm: Retrabalho/Reprotocolo", value=int(dados_semana_salvos.get('adm_retrabalho', 0)))
+                adm_cancelados = st.number_input("Adm: Quantidade de Cancelados / Desistências", value=int(dados_semana_salvos.get('adm_cancelados', 0)))
 
                 st.markdown("#### Financeiro")
                 faturamento = st.number_input("Faturamento emitido (R$)", value=float(dados_semana_salvos.get('faturamento', 0.0)))
@@ -496,6 +498,7 @@ else:
                 judicial_extinto = st.number_input("Judicial: Extinto sem resolução", value=int(dados_semana_salvos.get('judicial_extinto', 0)))
                 judicial_estoque = st.number_input("Judicial: Estoque (em revisão/aguardando protocolo)", value=int(dados_semana_salvos.get('judicial_estoque', 0)))
                 judicial_retrabalho = st.number_input("Judicial: Retrabalho/Reprotocolo", value=int(dados_semana_salvos.get('judicial_retrabalho', 0)))
+                judicial_cancelados = st.number_input("Judicial: Quantidade de Cancelados / Desistências", value=int(dados_semana_salvos.get('judicial_cancelados', 0)))
                 
                 prazos_fatal = st.number_input("Prazos protocolados no fatal", value=int(dados_semana_salvos.get('prazos_fatal', 0)))
                 prazos_perdidos = st.number_input("Prazos perdidos", value=int(dados_semana_salvos.get('prazos_perdidos', 0)))
@@ -509,37 +512,37 @@ else:
                 clientes_aguard_judicial = st.number_input("Clientes aguardando envio Judicial", value=int(dados_semana_salvos.get('clientes_aguard_judicial', 0)))
                 clientes_aguard_adm = st.number_input("Clientes aguardando envio Administrativo", value=int(dados_semana_salvos.get('clientes_aguard_adm', 0)))
                 avaliacoes_google = st.number_input("Novas avaliações no Google", value=int(dados_semana_salvos.get('avaliacoes_google', 0)))
-                cancelados_desistencia = st.number_input("Cancelados por Desistência", value=int(dados_semana_salvos.get('cancelados_desistencia', 0)))
+                cancelados_desistencia = st.number_input("Cancelados por Desistência (Geral CS)", value=int(dados_semana_salvos.get('cancelados_desistencia', 0)))
                 cancelados_docs_direito = st.number_input("Cancelados - Docs/Direito", value=int(dados_semana_salvos.get('cancelados_docs_direito', 0)))
                 
-                st.markdown("#### Equipe Ativa")
-                advogados = st.number_input("Advogados", value=int(dados_semana_salvos.get('advogados', 0)))
-                estagiarios = st.number_input("Estagiários", value=int(dados_semana_salvos.get('estagiarios', 0)))
-                auxiliares = st.number_input("Auxiliares", value=int(dados_semana_salvos.get('auxiliares', 0)))
-                assistentes = st.number_input("Assistentes", value=int(dados_semana_salvos.get('assistentes', 0)))
-                pj = st.number_input("PJ", value=int(dados_semana_salvos.get('pj', 0)))
+                st.markdown("#### Equipe Ativa por Área")
+                eq_comercial = st.number_input("Equipe: Comercial", value=int(dados_semana_salvos.get('eq_comercial', 0)))
+                eq_financeiro = st.number_input("Equipe: Financeiro", value=int(dados_semana_salvos.get('eq_financeiro', 0)))
+                eq_cs = st.number_input("Equipe: Sucesso do Cliente & Controladoria", value=int(dados_semana_salvos.get('eq_cs', 0)))
+                eq_adm = st.number_input("Equipe: Operacional Administrativo (INSS)", value=int(dados_semana_salvos.get('eq_adm', 0)))
+                eq_judicial = st.number_input("Equipe: Operacional Judicial", value=int(dados_semana_salvos.get('eq_judicial', 0)))
 
             st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
             submitted = st.form_submit_button("Salvar alterações", type="primary", use_container_width=True)
             if submitted:
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {
-                    'leads': leads, 'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada,
+                    'leads': leads, 'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada, 'comercial_cancelados': comercial_cancelados,
                     'inss_geral': inss_geral, 'inss_apos_idade': inss_apos_idade, 'inss_apos_idade_rural': inss_apos_idade_rural, 'inss_apos_tempo': inss_apos_tempo, 'inss_invalidez': inss_invalidez, 'inss_pensao': inss_pensao, 'inss_aux_doenca': inss_aux_doenca, 
                     'inss_incapacidade_rural': inss_incapacidade_rural, 'inss_sal_maternidade': inss_sal_maternidade, 'inss_aux_acidente': inss_aux_acidente, 'inss_bpc_idoso': inss_bpc_idoso, 'inss_bpc_deficiente': inss_bpc_deficiente,
                     'adm_pericia_agendada': adm_pericia_agendada, 'adm_pericia_realizada': adm_pericia_realizada, 'adm_pericia_ausencia': adm_pericia_ausencia, 'adm_pericia_reagendada': adm_pericia_reagendada,
                     'adm_av_soc_agendada': adm_av_soc_agendada, 'adm_av_soc_realizada': adm_av_soc_realizada, 'adm_av_soc_ausencia': adm_av_soc_ausencia, 'adm_av_soc_reagendada': adm_av_soc_reagendada,
-                    'adm_exig_cumprir': adm_exig_cumprir, 'adm_exig_cumpridas': adm_exig_cumpridas, 'adm_enviados_judicial': adm_enviados_judicial, 'adm_retrabalho': adm_retrabalho,
+                    'adm_exig_cumprir': adm_exig_cumprir, 'adm_exig_cumpridas': adm_exig_cumpridas, 'adm_enviados_judicial': adm_enviados_judicial, 'adm_retrabalho': adm_retrabalho, 'adm_cancelados': adm_cancelados,
                     'judicial_iniciais': judicial_iniciais, 'judicial_apos_idade': judicial_apos_idade, 'judicial_apos_idade_rural': judicial_apos_idade_rural, 'judicial_apos_tempo': judicial_apos_tempo, 'judicial_invalidez': judicial_invalidez, 'judicial_pensao': judicial_pensao, 
                     'judicial_sal_maternidade': judicial_sal_maternidade, 'judicial_aux_acidente': judicial_aux_acidente, 'judicial_incapacidade_rural': judicial_incapacidade_rural, 'judicial_bpc_idoso': judicial_bpc_idoso, 'judicial_bpc_deficiente': judicial_bpc_deficiente,
                     'judicial_emendas': judicial_emendas, 'judicial_pericia_agendada': judicial_pericia_agendada, 'judicial_pericia_realizada': judicial_pericia_realizada, 'judicial_pericia_ausencia': judicial_pericia_ausencia,
                     'judicial_recursos': judicial_recursos, 'judicial_rec_providos': judicial_rec_providos, 'judicial_rec_improvidos': judicial_rec_improvidos,
-                    'sentecas_proc': sentecas_proc, 'sentecas_improc': sentecas_improc, 'judicial_extinto': judicial_extinto, 'judicial_estoque': judicial_estoque, 'judicial_retrabalho': judicial_retrabalho,
+                    'sentecas_proc': sentecas_proc, 'sentecas_improc': sentecas_improc, 'judicial_extinto': judicial_extinto, 'judicial_estoque': judicial_estoque, 'judicial_retrabalho': judicial_retrabalho, 'judicial_cancelados': judicial_cancelados,
                     'prazos_fatal': prazos_fatal, 'prazos_perdidos': prazos_perdidos, 'acordos_homologados': acordos_homologados,
                     'faturamento': faturamento, 'recebido': recebido, 'vencido': vencido, 'rpv_precatorio': rpv_precatorio, 'pagamento_adm': pagamento_adm, 
                     'cs_contatos': cs_contatos, 'nps': nps, 'contatos_aniversariantes': contatos_aniversariantes, 'processos_arquivados': processos_arquivados,
                     'clientes_aguard_judicial': clientes_aguard_judicial, 'clientes_aguard_adm': clientes_aguard_adm, 'avaliacoes_google': avaliacoes_google, 
                     'cancelados_desistencia': cancelados_desistencia, 'cancelados_docs_direito': cancelados_docs_direito,
-                    'advogados': advogados, 'estagiarios': estagiarios, 'auxiliares': auxiliares, 'assistentes': assistentes, 'pj': pj
+                    'eq_comercial': eq_comercial, 'eq_financeiro': eq_financeiro, 'eq_cs': eq_cs, 'eq_adm': eq_adm, 'eq_judicial': eq_judicial
                 }
                 st.success(f"Dados da **{semana_atual}** salvos com sucesso.")
                 st.rerun()
@@ -547,22 +550,22 @@ else:
     # --- CONSOLIDAÇÃO ---
     totais_mes = {}
     chaves_numericas = [
-        'leads', 'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada',
+        'leads', 'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada', 'comercial_cancelados',
         'inss_geral', 'inss_apos_idade', 'inss_apos_idade_rural', 'inss_apos_tempo', 'inss_invalidez', 'inss_pensao', 'inss_aux_doenca', 
         'inss_incapacidade_rural', 'inss_sal_maternidade', 'inss_aux_acidente', 'inss_bpc_idoso', 'inss_bpc_deficiente',
         'adm_pericia_agendada', 'adm_pericia_realizada', 'adm_pericia_ausencia', 'adm_pericia_reagendada',
         'adm_av_soc_agendada', 'adm_av_soc_realizada', 'adm_av_soc_ausencia', 'adm_av_soc_reagendada',
-        'adm_exig_cumprir', 'adm_exig_cumpridas', 'adm_enviados_judicial', 'adm_retrabalho',
+        'adm_exig_cumprir', 'adm_exig_cumpridas', 'adm_enviados_judicial', 'adm_retrabalho', 'adm_cancelados',
         'judicial_iniciais', 'judicial_apos_idade', 'judicial_apos_idade_rural', 'judicial_apos_tempo', 'judicial_invalidez', 'judicial_pensao', 
         'judicial_sal_maternidade', 'judicial_aux_acidente', 'judicial_incapacidade_rural', 'judicial_bpc_idoso', 'judicial_bpc_deficiente',
         'judicial_emendas', 'judicial_pericia_agendada', 'judicial_pericia_realizada', 'judicial_pericia_ausencia',
         'judicial_recursos', 'judicial_rec_providos', 'judicial_rec_improvidos',
-        'sentecas_proc', 'sentecas_improc', 'judicial_extinto', 'judicial_estoque', 'judicial_retrabalho',
+        'sentecas_proc', 'sentecas_improc', 'judicial_extinto', 'judicial_estoque', 'judicial_retrabalho', 'judicial_cancelados',
         'prazos_fatal', 'prazos_perdidos', 'acordos_homologados', 'faturamento', 'recebido', 'vencido', 'rpv_precatorio', 'pagamento_adm', 
         'cs_contatos', 'nps', 'contatos_aniversariantes', 'processos_arquivados',
         'clientes_aguard_judicial', 'clientes_aguard_adm', 'avaliacoes_google', 
         'cancelados_desistencia', 'cancelados_docs_direito',
-        'advogados', 'estagiarios', 'auxiliares', 'assistentes', 'pj'
+        'eq_comercial', 'eq_financeiro', 'eq_cs', 'eq_adm', 'eq_judicial'
     ]
 
     for chave in chaves_numericas:
