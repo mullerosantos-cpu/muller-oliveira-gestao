@@ -18,40 +18,31 @@ st.markdown("""
         --bg: #F6F7F9;
         --sidebar: #1D2633;
         --sidebar-hover: #253142;
-
         --surface: #FFFFFF;
         --surface-soft: #F1F3F5;
-
         --border: #E2E5E9;
         --border-dark: #344154;
-
         --text: #202632;
         --text-secondary: #6E7684;
         --text-muted: #8A919D;
-
         --text-dark-bg: #F4F5F7;
         --text-dark-bg-secondary: #AEB6C2;
-
         --accent: #B89A6A;
         --accent-hover: #A8895D;
-
         --success: #59806A;
         --danger: #A45F5F;
         --warning: #B38B56;
-
         --radius-input: 9px;
         --radius-button: 9px;
         --radius-card: 12px;
     }
 
-    /* Fundo Geral da Aplicação */
     .stApp {
         background-color: var(--bg) !important;
         color: var(--text) !important;
         font-family: 'Inter', sans-serif !important;
     }
 
-    /* Sidebar Executiva Escura */
     section[data-testid="stSidebar"] {
         background-color: var(--sidebar) !important;
         border-right: 1px solid var(--border-dark) !important;
@@ -64,8 +55,6 @@ st.markdown("""
     section[data-testid="stSidebar"] hr {
         border-color: var(--border-dark) !important;
     }
-
-    /* Ajuste para inputs dentro da Sidebar (texto legível) */
     section[data-testid="stSidebar"] div[data-baseweb="input"] input, 
     section[data-testid="stSidebar"] div[data-baseweb="select"] span,
     section[data-testid="stSidebar"] .stNumberInput input, 
@@ -73,7 +62,6 @@ st.markdown("""
         color: #202632 !important;
     }
 
-    /* Tipografia Global unificada em Inter */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif !important;
         color: var(--text) !important;
@@ -81,7 +69,6 @@ st.markdown("""
         letter-spacing: -0.02em;
     }
 
-    /* Inputs e Controles do Conteúdo Principal */
     div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
         background-color: var(--surface) !important;
         border-radius: var(--radius-input) !important;
@@ -102,7 +89,6 @@ st.markdown("""
         height: 42px !important;
     }
 
-    /* Formulários e Superfícies */
     div[data-testid="stForm"] {
         background-color: var(--surface) !important;
         padding: 24px !important;
@@ -111,7 +97,6 @@ st.markdown("""
         box-shadow: 0 1px 3px rgba(31, 38, 50, 0.04);
     }
 
-    /* Cards de Métricas Compactos */
     [data-testid="stMetric"] {
         background-color: var(--surface) !important;
         padding: 18px 20px !important;
@@ -134,7 +119,6 @@ st.markdown("""
         line-height: 1.1 !important;
     }
 
-    /* Botões Primários (Champagne) */
     .stButton > button[kind="primary"], div.stButton > button:first-child {
         background-color: var(--accent) !important;
         color: #FFFFFF !important;
@@ -149,7 +133,6 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-    /* Botões Secundários */
     .stButton > button[kind="secondary"] {
         background-color: var(--surface) !important;
         border: 1px solid var(--border) !important;
@@ -165,7 +148,6 @@ st.markdown("""
         color: var(--text) !important;
     }
 
-    /* Navegação por Abas Minimalista */
     .stTabs [data-baseweb="tab-list"] {
         gap: 16px;
         background-color: transparent !important;
@@ -207,7 +189,10 @@ if 'base_dados_geral' not in st.session_state:
 if 'usuario_logado' not in st.session_state:
     st.session_state['usuario_logado'] = None
 
-# --- TELA DE AUTENTICAÇÃO EXECUTIVA (TEMA CLARO) ---
+if 'modo_gerenciar' not in st.session_state:
+    st.session_state['modo_gerenciar'] = False
+
+# --- TELA DE AUTENTICAÇÃO EXECUTIVA ---
 if st.session_state['usuario_logado'] is None:
     st.markdown("""
         <div style="max-width: 400px; margin: 100px auto; background-color: #FFFFFF; padding: 40px; border-radius: 14px; border: 1px solid #E2E5E9; box-shadow: 0 4px 20px rgba(31, 38, 50, 0.06); text-align: center;">
@@ -268,38 +253,9 @@ st.sidebar.markdown("---")
 if is_admin:
     st.sidebar.markdown("<div style='font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; color: #8F98A6; margin-bottom: 8px;'>Painel</div>", unsafe_allow_html=True)
     
-    with st.sidebar.expander("Gerenciar escritórios", expanded=False):
-        with st.form("cad_escritorio"):
-            st.markdown("**Novo Escritório**")
-            novo_id = st.text_input("Usuário de acesso", placeholder="escritorio_b")
-            novo_nome = st.text_input("Nome do escritório", placeholder="Nayara Lira Advocacia")
-            nova_senha = st.text_input("Senha", type="password")
-            salvar_escritorio = st.form_submit_button("Criar acesso", type="primary", use_container_width=True)
-            
-            if salvar_escritorio:
-                if novo_id and novo_nome and nova_senha:
-                    st.session_state['usuarios'][novo_id] = {"senha": nova_senha, "nome": novo_nome, "tipo": "cliente"}
-                    if novo_nome not in st.session_state['base_dados_geral']:
-                        st.session_state['base_dados_geral'][novo_nome] = {}
-                    st.success(f"Escritório '{novo_nome}' criado.")
-                    st.rerun()
-                else:
-                    st.error("Preencha todos os campos.")
-
-        st.markdown("---")
-        lista_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
-        if lista_clientes:
-            escritorio_para_excluir = st.selectbox("Remover escritório", lista_clientes, key="del_esc")
-            if st.button("Excluir escritório", type="secondary", use_container_width=True):
-                chave_del = [k for k, v in st.session_state['usuarios'].items() if v['nome'] == escritorio_para_excluir]
-                if chave_del:
-                    del st.session_state['usuarios'][chave_del[0]]
-                if escritorio_para_excluir in st.session_state['base_dados_geral']:
-                    del st.session_state['base_dados_geral'][escritorio_para_excluir]
-                st.success("Removido com sucesso.")
-                st.rerun()
-        else:
-            st.info("Nenhum cliente cadastrado.")
+    if st.sidebar.button("Gerenciar escritórios", type="secondary", use_container_width=True):
+        st.session_state['modo_gerenciar'] = not st.session_state['modo_gerenciar']
+        st.rerun()
 
     st.sidebar.markdown("---")
     lista_nomes_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
@@ -321,7 +277,7 @@ mes_ano_str = f"{mes_escolhido}/{ano_escolhido}"
 
 semana_atual = st.sidebar.selectbox("Semana de Referência", ["Semana 1", "Semana 2", "Semana 3", "Semana 4"])
 
-# --- CABEÇALHO PRINCIPAL INTEGRADO (TEMA CLARO) ---
+# --- CABEÇALHO PRINCIPAL INTEGRADO ---
 col_h1, col_h2 = st.columns([3, 1])
 with col_h1:
     st.markdown(f"""
@@ -340,8 +296,57 @@ with col_h2:
 
 st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
 
-if escritorio_selecionado == "Nenhum":
-    st.warning("Nenhum escritório cliente cadastrado. Utilize o painel lateral do consultor para cadastrar o primeiro cliente.")
+# --- MODO GERENCIAR ESCRITÓRIOS (ADMIN) ---
+if is_admin and st.session_state.get('modo_gerenciar', False):
+    st.markdown("""
+        <div style="background: #FFFFFF; border: 1px solid #E2E5E9; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+            <h3 style="margin-top: 0; font-size: 20px;">Gestão de Escritórios Clientes</h3>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    col_g1, col_g2 = st.columns(2, gap="large")
+    with col_g1:
+        with st.form("cad_escritorio_main"):
+            st.markdown("#### Cadastrar Novo Escritório")
+            novo_id = st.text_input("Usuário de acesso", placeholder="escritorio_b")
+            novo_nome = st.text_input("Nome do escritório", placeholder="Nayara Lira Advocacia")
+            nova_senha = st.text_input("Senha", type="password")
+            salvar_escritorio = st.form_submit_button("Criar acesso", type="primary", use_container_width=True)
+            
+            if salvar_escritorio:
+                if novo_id and novo_nome and nova_senha:
+                    st.session_state['usuarios'][novo_id] = {"senha": nova_senha, "nome": novo_nome, "tipo": "cliente"}
+                    if novo_nome not in st.session_state['base_dados_geral']:
+                        st.session_state['base_dados_geral'][novo_nome] = {}
+                    st.success(f"Escritório '{novo_nome}' criado com sucesso!")
+                    st.rerun()
+                else:
+                    st.error("Preencha todos os campos.")
+
+    with col_g2:
+        with st.form("del_escritorio_main"):
+            st.markdown("#### Remover Escritório")
+            lista_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
+            if lista_clientes:
+                escritorio_para_excluir = st.selectbox("Selecionar escritório para remoção", lista_clientes)
+                excluir_btn = st.form_submit_button("Excluir escritório", use_container_width=True)
+                if excluir_btn:
+                    chave_del = [k for k, v in st.session_state['usuarios'].items() if v['nome'] == escritorio_para_excluir]
+                    if chave_del:
+                        del st.session_state['usuarios'][chave_del[0]]
+                    if escritorio_para_excluir in st.session_state['base_dados_geral']:
+                        del st.session_state['base_dados_geral'][escritorio_para_excluir]
+                    st.success(f"Escritório '{escritorio_para_excluir}' removido.")
+                    st.rerun()
+            else:
+                st.info("Nenhum cliente cadastrado.")
+
+    if st.button("← Voltar ao Dashboard Principal"):
+        st.session_state['modo_gerenciar'] = False
+        st.rerun()
+
+elif escritorio_selecionado == "Nenhum":
+    st.warning("Nenhum escritório cliente cadastrado. Utilize o botão 'Gerenciar escritórios' no menu lateral.")
 else:
     if escritorio_selecionado not in st.session_state['base_dados_geral']:
         st.session_state['base_dados_geral'][escritorio_selecionado] = {}
@@ -382,20 +387,38 @@ else:
             col1, col2 = st.columns(2, gap="large")
             with col1:
                 st.markdown("#### Comercial (Físico & Digital)")
+                leads = st.number_input("Quantidade de Leads", value=int(dados_semana_salvos.get('leads', 0)))
                 leads_fisico = st.number_input("Atendimentos Comercial Físico", value=int(dados_semana_salvos.get('leads_fisico', 0)))
                 leads_digital = st.number_input("Atendimentos Comercial Digital", value=int(dados_semana_salvos.get('leads_digital', 0)))
                 qualificados = st.number_input("Contratos qualificados gerais", value=int(dados_semana_salvos.get('qualificados', 0)))
                 contratos = st.number_input("Contratos fechados (Vendido)", value=int(dados_semana_salvos.get('contratos', 0)))
                 receita_contratada = st.number_input("Receita contratada (R$)", value=float(dados_semana_salvos.get('receita_contratada', 0.0)))
                 
-                st.markdown("#### Operacional INSS (Protocolos)")
+                st.markdown("#### Operacional Administrativo (INSS)")
                 inss_geral = st.number_input("Protocolos Adm. INSS Totais", value=int(dados_semana_salvos.get('inss_geral', 0)))
                 inss_apos_idade = st.number_input("INSS: Aposentadoria por Idade", value=int(dados_semana_salvos.get('inss_apos_idade', 0)))
                 inss_apos_tempo = st.number_input("INSS: Aposentadoria por Tempo/Contribuição", value=int(dados_semana_salvos.get('inss_apos_tempo', 0)))
                 inss_invalidez = st.number_input("INSS: Aposentadoria por Invalidez", value=int(dados_semana_salvos.get('inss_invalidez', 0)))
                 inss_pensao = st.number_input("INSS: Pensão por Morte", value=int(dados_semana_salvos.get('inss_pensao', 0)))
                 inss_aux_doenca = st.number_input("INSS: Auxílio Doença / Incapacidade", value=int(dados_semana_salvos.get('inss_aux_doenca', 0)))
-                inss_bpc = st.number_input("INSS: BPC / Loas", value=int(dados_semana_salvos.get('inss_bpc', 0)))
+                inss_sal_maternidade = st.number_input("INSS: Salário Maternidade", value=int(dados_semana_salvos.get('inss_sal_maternidade', 0)))
+                inss_aux_acidente = st.number_input("INSS: Auxílio-Acidente", value=int(dados_semana_salvos.get('inss_aux_acidente', 0)))
+                inss_bpc_idoso = st.number_input("INSS: BPC Idoso", value=int(dados_semana_salvos.get('inss_bpc_idoso', 0)))
+                inss_bpc_deficiente = st.number_input("INSS: BPC Deficiente", value=int(dados_semana_salvos.get('inss_bpc_deficiente', 0)))
+                
+                st.markdown("##### Perícias & Exigências (Adm)")
+                adm_pericia_agendada = st.number_input("Adm: Perícias agendadas", value=int(dados_semana_salvos.get('adm_pericia_agendada', 0)))
+                adm_pericia_realizada = st.number_input("Adm: Perícias realizadas", value=int(dados_semana_salvos.get('adm_pericia_realizada', 0)))
+                adm_pericia_ausencia = st.number_input("Adm: Ausências em perícias", value=int(dados_semana_salvos.get('adm_pericia_ausencia', 0)))
+                adm_pericia_reagendada = st.number_input("Adm: Perícias reagendadas/remarcadas", value=int(dados_semana_salvos.get('adm_pericia_reagendada', 0)))
+                
+                adm_av_soc_agendada = st.number_input("Adm: Avaliação social agendada", value=int(dados_semana_salvos.get('adm_av_soc_agendada', 0)))
+                adm_av_soc_realizada = st.number_input("Adm: Avaliação social realizada", value=int(dados_semana_salvos.get('adm_av_soc_realizada', 0)))
+                adm_av_soc_ausencia = st.number_input("Adm: Avaliação social - ausências", value=int(dados_semana_salvos.get('adm_av_soc_ausencia', 0)))
+                adm_av_soc_reagendada = st.number_input("Adm: Avaliação social reagendada/remarcada", value=int(dados_semana_salvos.get('adm_av_soc_reagendada', 0)))
+                
+                adm_exig_cumprir = st.number_input("Adm: Quantidade de exigências a cumprir", value=int(dados_semana_salvos.get('adm_exig_cumprir', 0)))
+                adm_exig_cumpridas = st.number_input("Adm: Quantidade de exigências cumpridas", value=int(dados_semana_salvos.get('adm_exig_cumpridas', 0)))
 
                 st.markdown("#### Financeiro")
                 faturamento = st.number_input("Faturamento emitido (R$)", value=float(dados_semana_salvos.get('faturamento', 0.0)))
@@ -410,19 +433,34 @@ else:
                 jf_apos_idade = st.number_input("JF: Aposentadoria por Idade", value=int(dados_semana_salvos.get('jf_apos_idade', 0)))
                 jf_apos_tempo = st.number_input("JF: Aposentadoria por Tempo", value=int(dados_semana_salvos.get('jf_apos_tempo', 0)))
                 jf_invalidez = st.number_input("JF: Aposentadoria por Invalidez", value=int(dados_semana_salvos.get('jf_invalidez', 0)))
-                jf_bpc = st.number_input("JF: BPC / Loas", value=int(dados_semana_salvos.get('jf_bpc', 0)))
+                jf_pensao = st.number_input("JF: Pensão por Morte", value=int(dados_semana_salvos.get('jf_pensao', 0)))
+                jf_sal_maternidade = st.number_input("JF: Salário Maternidade", value=int(dados_semana_salvos.get('jf_sal_maternidade', 0)))
+                jf_aux_acidente = st.number_input("JF: Auxílio-Acidente", value=int(dados_semana_salvos.get('jf_aux_acidente', 0)))
+                jf_bpc_idoso = st.number_input("JF: BPC Idoso", value=int(dados_semana_salvos.get('jf_bpc_idoso', 0)))
+                jf_bpc_deficiente = st.number_input("JF: BPC Deficiente", value=int(dados_semana_salvos.get('jf_bpc_deficiente', 0)))
+                
+                jf_emendas = st.number_input("JF: Emendas às iniciais", value=int(dados_semana_salvos.get('jf_emendas', 0)))
+                jf_pericia_agendada = st.number_input("JF: Perícias agendadas", value=int(dados_semana_salvos.get('jf_pericia_agendada', 0)))
+                jf_pericia_realizada = st.number_input("JF: Perícias realizadas", value=int(dados_semana_salvos.get('jf_pericia_realizada', 0)))
+                jf_pericia_ausencia = st.number_input("JF: Ausências em perícias", value=int(dados_semana_salvos.get('jf_pericia_ausencia', 0)))
+                jf_recursos = st.number_input("JF: Recursos", value=int(dados_semana_salvos.get('jf_recursos', 0)))
+                jf_rec_providos = st.number_input("JF: Recursos providos", value=int(dados_semana_salvos.get('jf_rec_providos', 0)))
+                jf_rec_improvidos = st.number_input("JF: Recursos improvidos", value=int(dados_semana_salvos.get('jf_rec_improvidos', 0)))
+                
                 sentecas_proc = st.number_input("Sentenças procedentes", value=int(dados_semana_salvos.get('sentecas_proc', 0)))
                 sentecas_improc = st.number_input("Sentenças improcedentes", value=int(dados_semana_salvos.get('sentecas_improc', 0)))
+                
+                prazos_fatal = st.number_input("Prazos protocolados no fatal", value=int(dados_semana_salvos.get('prazos_fatal', 0)))
+                prazos_perdidos = st.number_input("Prazos perdidos", value=int(dados_semana_salvos.get('prazos_perdidos', 0)))
+                acordos_homologados = st.number_input("Acordos homologados", value=int(dados_semana_salvos.get('acordos_homologados', 0)))
 
                 st.markdown("#### Sucesso do Cliente & Controladoria")
                 cs_contatos = st.number_input("Contatos de relacionamento CS", value=int(dados_semana_salvos.get('cs_contatos', 0)))
+                nps = st.number_input("NPS (Net Promoter Score)", value=float(dados_semana_salvos.get('nps', 0.0)))
+                contatos_aniversariantes = st.number_input("Contatos com aniversariantes do dia", value=int(dados_semana_salvos.get('contatos_aniversariantes', 0)))
                 processos_arquivados = st.number_input("Processos arquivados", value=int(dados_semana_salvos.get('processos_arquivados', 0)))
                 clientes_aguard_judicial = st.number_input("Clientes aguardando envio Judicial", value=int(dados_semana_salvos.get('clientes_aguard_judicial', 0)))
                 clientes_aguard_adm = st.number_input("Clientes aguardando envio Administrativo", value=int(dados_semana_salvos.get('clientes_aguard_adm', 0)))
-
-                st.markdown("#### RH & Qualidade")
-                tarefas_rh = st.number_input("Tarefas de RH concluídas", value=int(dados_semana_salvos.get('tarefas_rh', 0)))
-                onboardings = st.number_input("Onboardings concluídos", value=int(dados_semana_salvos.get('onboardings', 0)))
                 avaliacoes_google = st.number_input("Novas avaliações no Google", value=int(dados_semana_salvos.get('avaliacoes_google', 0)))
                 cancelados_desistencia = st.number_input("Cancelados por Desistência", value=int(dados_semana_salvos.get('cancelados_desistencia', 0)))
                 cancelados_docs_direito = st.number_input("Cancelados - Docs/Direito", value=int(dados_semana_salvos.get('cancelados_docs_direito', 0)))
@@ -431,19 +469,29 @@ else:
                 advogados = st.number_input("Advogados", value=int(dados_semana_salvos.get('advogados', 0)))
                 estagiarios = st.number_input("Estagiários", value=int(dados_semana_salvos.get('estagiarios', 0)))
                 auxiliares = st.number_input("Auxiliares", value=int(dados_semana_salvos.get('auxiliares', 0)))
+                assistentes = st.number_input("Assistentes", value=int(dados_semana_salvos.get('assistentes', 0)))
+                pj = st.number_input("PJ", value=int(dados_semana_salvos.get('pj', 0)))
 
             st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
             submitted = st.form_submit_button("Salvar alterações", type="primary", use_container_width=True)
             if submitted:
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {
-                    'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada,
-                    'inss_geral': inss_geral, 'inss_apos_idade': inss_apos_idade, 'inss_apos_tempo': inss_apos_tempo, 'inss_invalidez': inss_invalidez, 'inss_pensao': inss_pensao, 'inss_aux_doenca': inss_aux_doenca, 'inss_bpc': inss_bpc,
-                    'jf_iniciais': jf_iniciais, 'jf_apos_idade': jf_apos_idade, 'jf_apos_tempo': jf_apos_tempo, 'jf_invalidez': jf_invalidez, 'jf_bpc': jf_bpc,
-                    'sentecas_proc': sentecas_proc, 'sentecas_improc': sentecas_improc, 'faturamento': faturamento, 'recebido': recebido, 'vencido': vencido,
-                    'rpv_precatorio': rpv_precatorio, 'pagamento_adm': pagamento_adm, 'cs_contatos': cs_contatos, 'processos_arquivados': processos_arquivados,
-                    'clientes_aguard_judicial': clientes_aguard_judicial, 'clientes_aguard_adm': clientes_aguard_adm, 'tarefas_rh': tarefas_rh,
-                    'onboardings': onboardings, 'avaliacoes_google': avaliacoes_google, 'cancelados_desistencia': cancelados_desistencia, 'cancelados_docs_direito': cancelados_docs_direito,
-                    'advogados': advogados, 'estagiarios': estagiarios, 'auxiliares': auxiliares
+                    'leads': leads, 'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada,
+                    'inss_geral': inss_geral, 'inss_apos_idade': inss_apos_idade, 'inss_apos_tempo': inss_apos_tempo, 'inss_invalidez': inss_invalidez, 'inss_pensao': inss_pensao, 'inss_aux_doenca': inss_aux_doenca, 
+                    'inss_sal_maternidade': inss_sal_maternidade, 'inss_aux_acidente': inss_aux_acidente, 'inss_bpc_idoso': inss_bpc_idoso, 'inss_bpc_deficiente': inss_bpc_deficiente,
+                    'adm_pericia_agendada': adm_pericia_agendada, 'adm_pericia_realizada': adm_pericia_realizada, 'adm_pericia_ausencia': adm_pericia_ausencia, 'adm_pericia_reagendada': adm_pericia_reagendada,
+                    'adm_av_soc_agendada': adm_av_soc_agendada, 'adm_av_soc_realizada': adm_av_soc_realizada, 'adm_av_soc_ausencia': adm_av_soc_ausencia, 'adm_av_soc_reagendada': adm_av_soc_reagendada,
+                    'adm_exig_cumprir': adm_exig_cumprir, 'adm_exig_cumpridas': adm_exig_cumpridas,
+                    'jf_iniciais': jf_iniciais, 'jf_apos_idade': jf_apos_idade, 'jf_apos_tempo': jf_apos_tempo, 'jf_invalidez': jf_invalidez, 'jf_pensao': jf_pensao, 
+                    'jf_sal_maternidade': jf_sal_maternidade, 'jf_aux_acidente': jf_aux_acidente, 'jf_bpc_idoso': jf_bpc_idoso, 'jf_bpc_deficiente': jf_bpc_deficiente,
+                    'jf_emendas': jf_emendas, 'jf_pericia_agendada': jf_pericia_agendada, 'jf_pericia_realizada': jf_pericia_realizada, 'jf_pericia_ausencia': jf_pericia_ausencia,
+                    'jf_recursos': jf_recursos, 'jf_rec_providos': jf_rec_providos, 'jf_rec_improvidos': jf_rec_improvidos,
+                    'sentecas_proc': sentecas_proc, 'sentecas_improc': sentecas_improc, 'prazos_fatal': prazos_fatal, 'prazos_perdidos': prazos_perdidos, 'acordos_homologados': acordos_homologados,
+                    'faturamento': faturamento, 'recebido': recebido, 'vencido': vencido, 'rpv_precatorio': rpv_precatorio, 'pagamento_adm': pagamento_adm, 
+                    'cs_contatos': cs_contatos, 'nps': nps, 'contatos_aniversariantes': contatos_aniversariantes, 'processos_arquivados': processos_arquivados,
+                    'clientes_aguard_judicial': clientes_aguard_judicial, 'clientes_aguard_adm': clientes_aguard_adm, 'avaliacoes_google': avaliacoes_google, 
+                    'cancelados_desistencia': cancelados_desistencia, 'cancelados_docs_direito': cancelados_docs_direito,
+                    'advogados': advogados, 'estagiarios': estagiarios, 'auxiliares': auxiliares, 'assistentes': assistentes, 'pj': pj
                 }
                 st.success(f"Dados da **{semana_atual}** salvos com sucesso.")
                 st.rerun()
@@ -451,16 +499,31 @@ else:
     # --- CONSOLIDAÇÃO ---
     totais_mes = {}
     chaves_numericas = [
-        'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada',
-        'inss_geral', 'inss_apos_idade', 'inss_apos_tempo', 'inss_invalidez', 'inss_pensao', 'inss_aux_doenca', 'inss_bpc',
-        'jf_iniciais', 'jf_apos_idade', 'jf_apos_tempo', 'jf_invalidez', 'jf_bpc', 'sentecas_proc', 'sentecas_improc',
-        'faturamento', 'recebido', 'vencido', 'rpv_precatorio', 'pagamento_adm', 'cs_contatos', 'processos_arquivados',
-        'clientes_aguard_judicial', 'clientes_aguard_adm', 'tarefas_rh', 'onboardings', 'avaliacoes_google',
-        'cancelados_desistencia', 'cancelados_docs_direito', 'advogados', 'estagiarios', 'auxiliares'
+        'leads', 'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada',
+        'inss_geral', 'inss_apos_idade', 'inss_apos_tempo', 'inss_invalidez', 'inss_pensao', 'inss_aux_doenca', 
+        'inss_sal_maternidade', 'inss_aux_acidente', 'inss_bpc_idoso', 'inss_bpc_deficiente',
+        'adm_pericia_agendada', 'adm_pericia_realizada', 'adm_pericia_ausencia', 'adm_pericia_reagendada',
+        'adm_av_soc_agendada', 'adm_av_soc_realizada', 'adm_av_soc_ausencia', 'adm_av_soc_reagendada',
+        'adm_exig_cumprir', 'adm_exig_cumpridas',
+        'jf_iniciais', 'jf_apos_idade', 'jf_apos_tempo', 'jf_invalidez', 'jf_pensao', 
+        'jf_sal_maternidade', 'jf_aux_acidente', 'jf_bpc_idoso', 'jf_bpc_deficiente',
+        'jf_emendas', 'jf_pericia_agendada', 'jf_pericia_realizada', 'jf_pericia_ausencia',
+        'jf_recursos', 'jf_rec_providos', 'jf_rec_improvidos',
+        'sentecas_proc', 'sentecas_improc', 'prazos_fatal', 'prazos_perdidos', 'acordos_homologados',
+        'faturamento', 'recebido', 'vencido', 'rpv_precatorio', 'pagamento_adm', 
+        'cs_contatos', 'nps', 'contatos_aniversariantes', 'processos_arquivados',
+        'clientes_aguard_judicial', 'clientes_aguard_adm', 'avaliacoes_google', 
+        'cancelados_desistencia', 'cancelados_docs_direito',
+        'advogados', 'estagiarios', 'auxiliares', 'assistentes', 'pj'
     ]
 
     for chave in chaves_numericas:
-        totais_mes[chave] = sum([semana.get(chave, 0) for semana in historico_mes.values()])
+        if chave == 'nps':
+            # média simples para nps se houver valores
+            vals = [semana.get(chave, 0.0) for semana in historico_mes.values() if semana.get(chave, 0.0) > 0]
+            totais_mes[chave] = sum(vals) / len(vals) if vals else 0.0
+        else:
+            totais_mes[chave] = sum([semana.get(chave, 0) for semana in historico_mes.values()])
 
     taxa_conversao = (totais_mes['contratos'] / totais_mes['qualificados'] * 100) if totais_mes['qualificados'] > 0 else 0
     inadimplencia_pct = (totais_mes['vencido'] / totais_mes['faturamento'] * 100) if totais_mes['faturamento'] > 0 else 0
@@ -493,28 +556,28 @@ else:
         c4.metric("Recebido Efetivo", f"R$ {totais_mes['recebido']:,.2f}")
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Comercial (Físico x Digital)")
+        st.markdown("#### Comercial & Leads")
         f1, f2, f3, f4 = st.columns(4, gap="medium")
-        f1.metric("Comercial Físico", totais_mes['leads_fisico'])
-        f2.metric("Comercial Digital", totais_mes['leads_digital'])
-        f3.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
-        f4.metric("Receita Contratada", f"R$ {totais_mes['receita_contratada']:,.2f}")
+        f1.metric("Total Leads", totais_mes['leads'])
+        f2.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
+        f3.metric("Receita Contratada", f"R$ {totais_mes['receita_contratada']:,.2f}")
+        f4.metric("Contratos Fechados", totais_mes['contratos'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### Produção Operacional (INSS & JF)")
         op1, op2, op3, op4 = st.columns(4, gap="medium")
-        op1.metric("Total Protocolos INSS", totais_mes['inss_geral'])
-        op2.metric("Total Iniciais JF", totais_mes['jf_iniciais'])
-        op3.metric("Aposentadorias", totais_mes['inss_apos_idade'] + totais_mes['inss_apos_tempo'] + totais_mes['jf_apos_idade'] + totais_mes['jf_apos_tempo'])
-        op4.metric("Auxílio Doença", totais_mes['inss_aux_doenca'])
+        op1.metric("Protocolos INSS", totais_mes['inss_geral'])
+        op2.metric("Iniciais JF", totais_mes['jf_iniciais'])
+        op3.metric("BPC Total (Adm+JF)", totais_mes['inss_bpc_idoso'] + totais_mes['inss_bpc_deficiente'] + totais_mes['jf_bpc_idoso'] + totais_mes['jf_bpc_deficiente'])
+        op4.metric("Perícias Realizadas", totais_mes['adm_pericia_realizada'] + totais_mes['jf_pericia_realizada'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Financeiro & Controladoria")
-        fi1, fi2, fi3, fi4 = st.columns(4, gap="medium")
-        fi1.metric("Inadimplência", f"{inadimplencia_pct:.1f}%", f"R$ {totais_mes['vencido']:,.2f}")
-        fi2.metric("RPV / Precatórios", f"R$ {totais_mes['rpv_precatorio']:,.2f}")
-        fi3.metric("Pagamento Adm.", f"R$ {totais_mes['pagamento_adm']:,.2f}")
-        fi4.metric("Processos Arquivados", totais_mes['processos_arquivados'])
+        st.markdown("#### Sucesso do Cliente & Qualidade")
+        sc1, sc2, sc3, sc4 = st.columns(4, gap="medium")
+        sc1.metric("NPS Médio", f"{totais_mes['nps']:.1f}")
+        sc2.metric("Aniversariantes Contatados", totais_mes['contatos_aniversariantes'])
+        sc3.metric("Avaliações Google", totais_mes['avaliacoes_google'])
+        sc4.metric("Processos Arquivados", totais_mes['processos_arquivados'])
 
         st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### Histórico detalhado por semana")
