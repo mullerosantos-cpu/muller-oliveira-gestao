@@ -2,91 +2,172 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-st.set_page_config(page_title="Controladoria & Gestão | Muller Oliveira", page_icon="⚖️", layout="wide")
+st.set_page_config(
+    page_title="Controladoria & Gestão Executiva | Muller Oliveira", 
+    page_icon="⚖️", 
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# --- DESIGN SYSTEM: DARK MINIMALISTA EXECUTIVO (Muller Oliveira) ---
+# --- DESIGN SYSTEM: SOFTWARE EXECUTIVO SaaS (UI/UX PREMIUM) ---
 st.markdown("""
     <style>
-    .stApp { background-color: #0b0f19; color: #f8fafc; }
-    .main { background-color: #0b0f19; }
-    
-    [data-testid="stSidebar"] {
-        background-color: #111827;
-        border-right: 1px solid #1f2937;
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+        --bg-main: #080F1A;
+        --bg-sidebar: #0D1726;
+        --bg-card: #121D31;
+        --bg-card-secondary: #16233A;
+        --border: #263550;
+
+        --gold: #D6B238;
+        --gold-hover: #E4C456;
+
+        --text-primary: #F4F6FA;
+        --text-secondary: #AAB4C4;
+
+        --input-bg: #F4F5F7;
+        --input-text: #20283A;
+
+        --danger: #C86666;
+        --danger-hover: #D97777;
+
+        --radius-sm: 8px;
+        --radius-md: 10px;
+        --radius-lg: 16px;
+        --radius-xl: 18px;
     }
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, 
-    [data-testid="stSidebar"] label, [data-testid="stSidebar"] span, [data-testid="stSidebar"] div, [data-testid="stSidebar"] p {
-        color: #f8fafc !important;
+
+    /* Aplicação Geral */
+    .stApp {
+        background-color: var(--bg-main);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
     }
-    
-    h1, h2, h3, h4, p, span, label, div {
-        color: #f8fafc;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border);
     }
-    
+    section[data-testid="stSidebar"] h1, 
+    section[data-testid="stSidebar"] h2, 
+    section[data-testid="stSidebar"] h3, 
+    section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] span, 
+    section[data-testid="stSidebar"] div, 
+    section[data-testid="stSidebar"] p {
+        color: var(--text-primary) !important;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Tipografia de Títulos Globais */
+    h1, h2, h3, h4 {
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+    }
+
+    /* Inputs e Selects */
+    div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
+        background-color: var(--input-bg) !important;
+        border-radius: var(--radius-md) !important;
+        border: 1px solid transparent !important;
+    }
+    div[data-baseweb="input"] input, div[data-baseweb="select"] span {
+        color: var(--input-text) !important;
+    }
+    .stNumberInput input {
+        background-color: var(--input-bg) !important;
+        color: var(--input-text) !important;
+        border-radius: var(--radius-md) !important;
+        border: 1px solid transparent !important;
+    }
+    .stTextInput input {
+        background-color: var(--input-bg) !important;
+        color: var(--input-text) !important;
+        border-radius: var(--radius-md) !important;
+    }
+
+    /* Formulários Executivos */
     div[data-testid="stForm"] {
-        background-color: #131b2e;
+        background-color: var(--bg-card);
         padding: 28px;
-        border-radius: 12px;
-        border: 1px solid #1f2937;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
-    
+
+    /* Cards de Métricas */
     [data-testid="stMetric"] {
-        background-color: #131b2e;
-        padding: 18px;
-        border-radius: 10px;
-        border: 1px solid #1f2937;
-        border-left: 3px solid #d4af37;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        background-color: var(--bg-card);
+        padding: 20px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--gold);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
     [data-testid="stMetricValue"] {
-        color: #ffffff !important;
+        color: var(--text-primary) !important;
         font-weight: 700;
+        font-family: 'Inter', sans-serif;
     }
     [data-testid="stMetricLabel"] {
-        color: #94a3b8 !important;
+        color: var(--text-secondary) !important;
         font-size: 13px !important;
+        font-weight: 500;
     }
-    
-    .stButton>button {
-        background-color: #d4af37 !important;
-        color: #0b0f19 !important;
-        font-weight: 700;
-        border: none;
-        border-radius: 6px;
-        padding: 0.6rem 1.2rem;
-        transition: all 0.2s ease;
+
+    /* Botões Primários Padronizados (Dourados) */
+    .stButton > button[kind="primary"], div.stButton > button:first-child {
+        background-color: var(--gold) !important;
+        color: #101827 !important;
+        border: 1px solid var(--gold) !important;
+        border-radius: var(--radius-md) !important;
+        font-weight: 600 !important;
+        font-family: 'Inter', sans-serif !important;
+        transition: all 0.2s ease !important;
     }
-    .stButton>button:hover {
-        background-color: #e6c547 !important;
-        color: #0b0f19 !important;
-        box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    .stButton > button[kind="primary"]:hover, div.stButton > button:first-child:hover {
+        background-color: var(--gold-hover) !important;
+        border-color: var(--gold-hover) !important;
+        color: #080F1A !important;
+        box-shadow: 0 0 15px rgba(214, 178, 56, 0.3);
     }
-    
+
+    /* Abas de Navegação Superior */
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
         background-color: transparent;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0px;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: #111827;
-        border-radius: 6px 6px 0px 0px;
-        color: #94a3b8;
-        border: 1px solid #1f2937;
+        background-color: var(--bg-sidebar);
+        border-radius: var(--radius-sm) var(--radius-sm) 0px 0px;
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+        border-bottom: none;
         padding: 10px 18px;
+        font-weight: 500;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #131b2e !important;
-        color: #d4af37 !important;
-        border-bottom: 2px solid #d4af37 !important;
-        font-weight: 700;
+        background-color: var(--bg-card) !important;
+        color: var(--text-primary) !important;
+        border-bottom: 3px solid var(--gold) !important;
+        font-weight: 600 !important;
+    }
+
+    /* Estilos de Marca Customizados */
+    .brand-serif {
+        font-family: 'Cormorant Garamond', serif !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # --- INICIALIZAÇÃO DE DADOS NO SESSION STATE ---
 if 'usuarios' not in st.session_state:
-    # Credenciais iniciais padrão: Administrador e um escritório teste
     st.session_state['usuarios'] = {
         "admin": {"senha": "muller2026", "nome": "Muller Oliveira (Admin)", "tipo": "admin"},
         "escritorio_a": {"senha": "123", "nome": "T.A. Advocacia", "tipo": "cliente"}
@@ -100,66 +181,65 @@ if 'base_dados_geral' not in st.session_state:
 if 'usuario_logado' not in st.session_state:
     st.session_state['usuario_logado'] = None
 
-# --- TELA DE LOGIN E RECUPERAÇÃO ---
+# --- TELA DE AUTENTICAÇÃO (LOGIN / RECUPERAÇÃO) ---
 if st.session_state['usuario_logado'] is None:
     st.markdown("""
-        <div style="max-width: 420px; margin: 80px auto; background-color: #111827; padding: 40px; border-radius: 16px; border: 1px solid #1f2937; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center;">
-            <h2 style="color: #ffffff; margin-bottom: 5px; font-weight: 400; letter-spacing: 2px;">MULLER OLIVEIRA</h2>
-            <p style="color: #d4af37; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px;">Controladoria & Gestão Executiva</p>
+        <div style="max-width: 420px; margin: 90px auto; background-color: #0D1726; padding: 42px; border-radius: 18px; border: 1px solid #263550; box-shadow: 0 25px 50px rgba(0,0,0,0.7); text-align: center;">
+            <h2 class="brand-serif" style="color: #F4F6FA; margin-bottom: 4px; font-size: 32px; font-weight: 600; letter-spacing: 2px;">Muller Oliveira</h2>
+            <p style="color: #D6B238; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px; font-weight: 600;">Controladoria & Gestão Executiva</p>
         </div>
     """, unsafe_allow_html=True)
     
     col_l1, col_col, col_l2 = st.columns([1, 1.2, 1])
     with col_col:
-        aba_login, aba_rec = st.tabs(["🔑 Entrar", "❓ Esqueci a Senha"])
+        aba_login, aba_rec = st.tabs(["Acesso Executivo", "Recuperar Senha"])
         
         with aba_login:
             with st.form("form_login"):
-                usuario_input = st.text_input("Usuário")
+                st.markdown("<p style='font-size: 13px; color: #AAB4C4; margin-bottom: 12px;'>Entre com suas credenciais corporativas.</p>", unsafe_allow_html=True)
+                usuario_input = st.text_input("Usuário de acesso")
                 senha_input = st.text_input("Senha", type="password")
-                entrar = st.form_submit_button("Acessar Plataforma")
+                entrar = st.form_submit_button("Acessar plataforma", icon=":material/login:")
                 
                 if entrar:
                     if usuario_input in st.session_state['usuarios'] and st.session_state['usuarios'][usuario_input]['senha'] == senha_input:
                         st.session_state['usuario_logado'] = usuario_input
-                        st.success("Login realizado com sucesso!")
                         st.rerun()
                     else:
-                        st.error("Usuário ou senha incorretos.")
+                        st.error("Credenciais inválidas. Verifique seu usuário e senha.")
                         
         with aba_rec:
-            st.markdown("<p style='font-size: 13px; color: #94a3b8; margin-top: 10px;'>Insira seu usuário para solicitar o restablecimento de credenciais ao administrador da consultoria.</p>", unsafe_allow_html=True)
-            user_rec = st.text_input("Seu Usuário de Acesso", key="rec_user")
-            if st.button("Enviar Solicitação"):
+            st.markdown("<p style='font-size: 13px; color: #AAB4C4; margin-top: 10px;'>Informe seu usuário para solicitar o reestabelecimento de credenciais.</p>", unsafe_allow_html=True)
+            user_rec = st.text_input("Usuário cadastrado", key="rec_user")
+            if st.button("Enviar solicitação", icon=":material/send:", type="secondary"):
                 if user_rec in st.session_state['usuarios']:
-                    st.success("Solicitação enviada! O consultor Muller Oliveira entrará em contato com sua nova senha temporária.")
+                    st.success("Solicitação enviada. O administrador entrará em contato.")
                 else:
-                    st.warning("Usuário não encontrado na base.")
+                    st.warning("Usuário não localizado na base.")
     st.stop()
 
-# --- USUÁRIO LOGADO ---
+# --- SESSÃO ATIVA & SIDEBAR EXECUTIVA ---
 user_atual = st.session_state['usuario_logado']
 dados_user = st.session_state['usuarios'][user_atual]
 is_admin = dados_user['tipo'] == 'admin'
 
-# --- BARRA LATERAL ---
-st.sidebar.markdown(f"👤 **Logado como:** {dados_user['nome']}")
-if st.sidebar.button("🚪 Sair / Logout"):
+st.sidebar.markdown(f"**Sessão Ativa**\n\n`{dados_user['nome']}`")
+if st.sidebar.button("Encerrar sessão", icon=":material/logout:", type="secondary"):
     st.session_state['usuario_logado'] = None
     st.rerun()
 
 st.sidebar.markdown("---")
 
-# SE FOR ADMIN, PODE GERENCIAR OS ESCRITÓRIOS
 if is_admin:
-    st.sidebar.header("⚙️ Painel do Consultor (Admin)")
+    st.sidebar.markdown("### Painel do Consultor")
     
-    with st.sidebar.expander("🏢 Cadastrar Novo Escritório"):
+    with st.sidebar.expander("Gerenciar escritórios", expanded=False):
         with st.form("cad_escritorio"):
-            novo_id = st.text_input("ID de Usuário (Ex: escritorio_b)")
-            novo_nome = st.text_input("Nome do Escritório (Ex: Silva & Advogados)")
-            nova_senha = st.text_input("Senha de Acesso", type="password")
-            salvar_escritorio = st.form_submit_button("Salvar e Criar Acesso")
+            st.markdown("**Cadastrar novo escritório**")
+            novo_id = st.text_input("Usuário de acesso", placeholder="escritorio_b")
+            novo_nome = st.text_input("Nome do escritório", placeholder="Nayara Lira Advocacia")
+            nova_senha = st.text_input("Senha", type="password")
+            salvar_escritorio = st.form_submit_button("Criar acesso", icon=":material/add_business:")
             
             if salvar_escritorio:
                 if novo_id and novo_nome and nova_senha:
@@ -169,60 +249,59 @@ if is_admin:
                     st.success(f"Escritório '{novo_nome}' criado com sucesso!")
                     st.rerun()
                 else:
-                    st.error("Preencha todos os campos.")
+                    st.error("Preencha todos os campos obrigatórios.")
 
-    with st.sidebar.expander("🗑️ Excluir Escritório"):
+        st.markdown("---")
+        st.markdown("**Remover escritório**")
         lista_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
         if lista_clientes:
-            escritorio_para_excluir = st.selectbox("Selecione para Excluir", lista_clientes)
-            if st.button("Confirmar Exclusão"):
-                # Remove do dicionario de usuarios e dados
+            escritorio_para_excluir = st.selectbox("Selecione o escritório", lista_clientes, key="del_esc")
+            if st.button("Excluir escritório", icon=":material/delete:", type="secondary"):
                 chave_del = [k for k, v in st.session_state['usuarios'].items() if v['nome'] == escritorio_para_excluir]
                 if chave_del:
                     del st.session_state['usuarios'][chave_del[0]]
                 if escritorio_para_excluir in st.session_state['base_dados_geral']:
                     del st.session_state['base_dados_geral'][escritorio_para_excluir]
-                st.success(f"Escritório '{escritorio_para_excluir}' excluído!")
+                st.success(f"Escritório '{escritorio_para_excluir}' removido.")
                 st.rerun()
         else:
-            st.info("Nenhum escritório cliente cadastrado.")
-            
+            st.info("Nenhum cliente cadastrado.")
+
     st.sidebar.markdown("---")
-    # Admin escolhe qual escritório deseja auditar/visualizar
     lista_nomes_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
     if lista_nomes_clientes:
-        escritorio_selecionado = st.sidebar.selectbox("Auditar Escritório Cliente", lista_nomes_clientes)
+        escritorio_selecionado = st.sidebar.selectbox("Escritório ativo", lista_nomes_clientes)
     else:
         escritorio_selecionado = "Nenhum"
 else:
-    # Se for cliente, ele só vê o escritório dele automaticamente
     escritorio_selecionado = dados_user['nome']
     if escritorio_selecionado not in st.session_state['base_dados_geral']:
         st.session_state['base_dados_geral'][escritorio_selecionado] = {}
 
-st.sidebar.header("📅 Período de Competência")
+st.sidebar.markdown("### Período de Competência")
 meses_do_ano = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
 mes_escolhido = st.sidebar.selectbox("Mês", meses_do_ano, index=7)
 ano_escolhido = st.sidebar.number_input("Ano", min_value=2024, max_value=2035, value=2026)
 mes_ano_str = f"{mes_escolhido}/{ano_escolhido}"
 
-semana_atual = st.sidebar.selectbox("Selecione a Semana", ["Semana 1", "Semana 2", "Semana 3", "Semana 4"])
+semana_atual = st.sidebar.selectbox("Semana de Referência", ["Semana 1", "Semana 2", "Semana 3", "Semana 4"])
 
-# --- CABEÇALHO EXECUTIVO ---
+# --- CABEÇALHO PRINCIPAL EXECUTIVO ---
 st.markdown(f"""
-    <div style="background-color: #111827; padding: 28px 36px; border-radius: 12px; border-bottom: 4px solid #d4af37; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+    <div style="background-color: #0D1726; padding: 28px 36px; border-radius: 16px; border: 1px solid #263550; border-bottom: 4px solid #D6B238; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
         <div>
-            <h1 style="margin: 0; font-size: 26px; letter-spacing: 3px; color: #ffffff !important; font-weight: 600;">MULLER OLIVEIRA</h1>
-            <p style="margin: 6px 0 0 0; font-size: 11px; letter-spacing: 5px; color: #d4af37 !important; text-transform: uppercase; font-weight: 700;">CONTROLADORIA & GESTÃO EXECUTIVA</p>
+            <h1 class="brand-serif" style="margin: 0; font-size: 30px; letter-spacing: 2px; color: #F4F6FA !important; font-weight: 600;">Muller Oliveira</h1>
+            <p style="margin: 6px 0 0 0; font-size: 11px; letter-spacing: 4px; color: #D6B238 !important; text-transform: uppercase; font-weight: 600;">Controladoria & Gestão Executiva</p>
         </div>
-        <div style="text-align: right;">
-            <span style="font-size: 13px; color: #ffffff; background-color: #1f2937; border: 1px solid #374151; padding: 8px 16px; border-radius: 6px; font-weight: 600;">Cliente Ativo: {escritorio_selecionado}</span>
+        <div style="text-align: right; background-color: #121D31; border: 1px solid #263550; padding: 10px 18px; border-radius: 10px;">
+            <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #AAB4C4; margin-bottom: 2px;">Cliente Ativo</div>
+            <div style="font-size: 15px; font-weight: 600; color: #F4F6FA;">{escritorio_selecionado}</div>
         </div>
     </div>
 """, unsafe_allow_html=True)
 
 if escritorio_selecionado == "Nenhum":
-    st.warning("⚠️ Nenhum escritório cliente cadastrado. Use o painel administrativo na barra lateral para cadastrar o primeiro cliente.")
+    st.warning("Nenhum escritório cliente cadastrado. Utilize o painel lateral do consultor para cadastrar o primeiro cliente.")
 else:
     if escritorio_selecionado not in st.session_state['base_dados_geral']:
         st.session_state['base_dados_geral'][escritorio_selecionado] = {}
@@ -236,32 +315,36 @@ else:
     dados_semana_salvos = historico_mes.get(semana_atual, {})
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "📝 1. Lançamento Semanal", 
-        "📊 2. Consolidado Mensal", 
-        "⚖️ 3. Previsibilidade (Vendido x Entregue)", 
-        "🔍 4. Diagnóstico", 
-        "📋 5. Plano de Ação"
+        "Lançamento", 
+        "Consolidado", 
+        "Previsibilidade", 
+        "Diagnóstico", 
+        "Plano de Ação"
     ])
 
     with tab1:
-        st.subheader(f"Lançamento — {escritorio_selecionado} | {mes_ano_str} ({semana_atual})")
-        
-        if st.button(f"🧹 Limpar Dados de {semana_atual}"):
-            st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {}
-            st.success(f"Dados da {semana_atual} limpos!")
-            st.rerun()
+        col_t1, col_t2 = st.columns([3, 1])
+        with col_t1:
+            st.markdown(f"### Lançamento Semanal\n**{escritorio_selecionado}** · {mes_escolhido} de {ano_escolhido} · {semana_atual}")
+        with col_t2:
+            if st.button("Limpar dados da semana", icon=":material/cleaning_services:", type="secondary"):
+                st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {}
+                st.success(f"Dados da {semana_atual} limpos.")
+                st.rerun()
+
+        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
 
         with st.form(f"form_{escritorio_selecionado}_{mes_ano_str}_{semana_atual}"):
             col1, col2 = st.columns(2)
             with col1:
-                st.markdown("#### 📞 Comercial (Físico & Digital)")
+                st.markdown("#### Comercial (Físico & Digital)")
                 leads_fisico = st.number_input("Atendimentos Comercial Físico", value=int(dados_semana_salvos.get('leads_fisico', 0)))
                 leads_digital = st.number_input("Atendimentos Comercial Digital", value=int(dados_semana_salvos.get('leads_digital', 0)))
                 qualificados = st.number_input("Contratos qualificados gerais", value=int(dados_semana_salvos.get('qualificados', 0)))
                 contratos = st.number_input("Contratos fechados (Vendido)", value=int(dados_semana_salvos.get('contratos', 0)))
                 receita_contratada = st.number_input("Receita contratada (R$)", value=float(dados_semana_salvos.get('receita_contratada', 0.0)))
                 
-                st.markdown("#### 🏛️ Operacional INSS (Protocolos)")
+                st.markdown("#### Operacional INSS (Protocolos)")
                 inss_geral = st.number_input("Protocolos Adm. INSS Totais", value=int(dados_semana_salvos.get('inss_geral', 0)))
                 inss_apos_idade = st.number_input("INSS: Aposentadoria por Idade", value=int(dados_semana_salvos.get('inss_apos_idade', 0)))
                 inss_apos_tempo = st.number_input("INSS: Aposentadoria por Tempo/Contribuição", value=int(dados_semana_salvos.get('inss_apos_tempo', 0)))
@@ -270,7 +353,7 @@ else:
                 inss_aux_doenca = st.number_input("INSS: Auxílio Doença / Incapacidade", value=int(dados_semana_salvos.get('inss_aux_doenca', 0)))
                 inss_bpc = st.number_input("INSS: BPC / Loas", value=int(dados_semana_salvos.get('inss_bpc', 0)))
 
-                st.markdown("#### 💰 Financeiro")
+                st.markdown("#### Financeiro")
                 faturamento = st.number_input("Faturamento emitido (R$)", value=float(dados_semana_salvos.get('faturamento', 0.0)))
                 recebido = st.number_input("Valor efetivamente recebido (R$)", value=float(dados_semana_salvos.get('recebido', 0.0)))
                 vencido = st.number_input("Valor vencido / inadimplente (R$)", value=float(dados_semana_salvos.get('vencido', 0.0)))
@@ -278,7 +361,7 @@ else:
                 pagamento_adm = st.number_input("Pagamento Administrativo (R$)", value=float(dados_semana_salvos.get('pagamento_adm', 0.0)))
 
             with col2:
-                st.markdown("#### ⚖️ Operacional Justiça Federal (JF)")
+                st.markdown("#### Operacional Justiça Federal (JF)")
                 jf_iniciais = st.number_input("Protocolos Iniciais JF Totais", value=int(dados_semana_salvos.get('jf_iniciais', 0)))
                 jf_apos_idade = st.number_input("JF: Aposentadoria por Idade", value=int(dados_semana_salvos.get('jf_apos_idade', 0)))
                 jf_apos_tempo = st.number_input("JF: Aposentadoria por Tempo", value=int(dados_semana_salvos.get('jf_apos_tempo', 0)))
@@ -287,25 +370,26 @@ else:
                 sentecas_proc = st.number_input("Sentenças procedentes", value=int(dados_semana_salvos.get('sentecas_proc', 0)))
                 sentecas_improc = st.number_input("Sentenças improcedentes", value=int(dados_semana_salvos.get('sentecas_improc', 0)))
 
-                st.markdown("#### 🤝 Sucesso do Cliente & Controladoria")
+                st.markdown("#### Sucesso do Cliente & Controladoria")
                 cs_contatos = st.number_input("Contatos de relacionamento CS", value=int(dados_semana_salvos.get('cs_contatos', 0)))
                 processos_arquivados = st.number_input("Processos arquivados", value=int(dados_semana_salvos.get('processos_arquivados', 0)))
                 clientes_aguard_judicial = st.number_input("Clientes aguardando envio Judicial", value=int(dados_semana_salvos.get('clientes_aguard_judicial', 0)))
                 clientes_aguard_adm = st.number_input("Clientes aguardando envio Administrativo", value=int(dados_semana_salvos.get('clientes_aguard_adm', 0)))
 
-                st.markdown("#### 👥 RH & Qualidade")
+                st.markdown("#### RH & Qualidade")
                 tarefas_rh = st.number_input("Tarefas de RH concluídas", value=int(dados_semana_salvos.get('tarefas_rh', 0)))
                 onboardings = st.number_input("Onboardings concluídos", value=int(dados_semana_salvos.get('onboardings', 0)))
                 avaliacoes_google = st.number_input("Novas avaliações no Google", value=int(dados_semana_salvos.get('avaliacoes_google', 0)))
                 cancelados_desistencia = st.number_input("Cancelados por Desistência", value=int(dados_semana_salvos.get('cancelados_desistencia', 0)))
                 cancelados_docs_direito = st.number_input("Cancelados - Docs/Direito", value=int(dados_semana_salvos.get('cancelados_docs_direito', 0)))
                 
-                st.markdown("#### 🏛️ Equipe Ativa")
+                st.markdown("#### Equipe Ativa")
                 advogados = st.number_input("Advogados", value=int(dados_semana_salvos.get('advogados', 0)))
                 estagiarios = st.number_input("Estagiários", value=int(dados_semana_salvos.get('estagiarios', 0)))
                 auxiliares = st.number_input("Auxiliares", value=int(dados_semana_salvos.get('auxiliares', 0)))
 
-            submitted = st.form_submit_button(f"💾 Salvar Dados da {semana_atual}")
+            st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+            submitted = st.form_submit_button("Salvar alterações", icon=":material/save:", type="primary")
             if submitted:
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {
                     'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada,
@@ -317,10 +401,10 @@ else:
                     'onboardings': onboardings, 'avaliacoes_google': avaliacoes_google, 'cancelados_desistencia': cancelados_desistencia, 'cancelados_docs_direito': cancelados_docs_direito,
                     'advogados': advogados, 'estagiarios': estagiarios, 'auxiliares': auxiliares
                 }
-                st.success(f"Dados da **{semana_atual}** salvos para **{escritorio_selecionado}** ({mes_ano_str})!")
+                st.success(f"Dados da **{semana_atual}** salvos com sucesso.")
                 st.rerun()
 
-    # --- Consolidação ---
+    # --- CONSOLIDAÇÃO ---
     totais_mes = {}
     chaves_numericas = [
         'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada',
@@ -350,17 +434,18 @@ else:
         score_geral = (score_comercial * 0.20) + (score_financeiro * 0.20) + (score_operacao * 0.30) + (score_cliente * 0.15) + (score_gestao * 0.15)
 
     with tab2:
-        st.header(f"Consolidado Mensal Controladoria — {escritorio_selecionado} ({mes_ano_str})")
+        st.markdown(f"### Consolidado Mensal\n**{escritorio_selecionado}** · {mes_escolhido} de {ano_escolhido}")
+        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
         
         c1, c2, c3, c4 = st.columns(4)
-        status_score = "Aguardando Dados" if score_geral == 0 else "Consolidado"
+        status_score = "Aguardando dados" if score_geral == 0 else "Consolidado"
         c1.metric("Score de Gestão", f"{score_geral:.0f} / 100", status_score)
-        c2.metric("Total Vendido (Contratos)", totais_mes['contratos'])
-        c3.metric("Faturamento Consolidado", f"R$ {totais_mes['faturamento']:,.2f}")
+        c2.metric("Total Vendido", totais_mes['contratos'])
+        c3.metric("Faturamento", f"R$ {totais_mes['faturamento']:,.2f}")
         c4.metric("Recebido Efetivo", f"R$ {totais_mes['recebido']:,.2f}")
 
         st.markdown("---")
-        st.subheader("📞 Comercial (Físico x Digital)")
+        st.markdown("#### Comercial (Físico x Digital)")
         f1, f2, f3, f4 = st.columns(4)
         f1.metric("Comercial Físico", totais_mes['leads_fisico'])
         f2.metric("Comercial Digital", totais_mes['leads_digital'])
@@ -368,15 +453,15 @@ else:
         f4.metric("Receita Contratada", f"R$ {totais_mes['receita_contratada']:,.2f}")
 
         st.markdown("---")
-        st.subheader("🏛️ Produção Operacional (INSS & JF por Benefício)")
+        st.markdown("#### Produção Operacional (INSS & JF)")
         op1, op2, op3, op4 = st.columns(4)
         op1.metric("Total Protocolos INSS", totais_mes['inss_geral'])
-        op2.metric("Total Iniciais Justiça Federal", totais_mes['jf_iniciais'])
+        op2.metric("Total Iniciais JF", totais_mes['jf_iniciais'])
         op3.metric("Aposentadorias (INSS+JF)", totais_mes['inss_apos_idade'] + totais_mes['inss_apos_tempo'] + totais_mes['jf_apos_idade'] + totais_mes['jf_apos_tempo'])
-        op4.metric("Auxílio Doença / Incapacidade", totais_mes['inss_aux_doenca'])
+        op4.metric("Auxílio Doença", totais_mes['inss_aux_doenca'])
 
         st.markdown("---")
-        st.subheader("💰 Financeiro & Controladoria")
+        st.markdown("#### Financeiro & Controladoria")
         fi1, fi2, fi3, fi4 = st.columns(4)
         fi1.metric("Inadimplência", f"{inadimplencia_pct:.1f}%", f"R$ {totais_mes['vencido']:,.2f}")
         fi2.metric("RPV / Precatórios", f"R$ {totais_mes['rpv_precatorio']:,.2f}")
@@ -384,12 +469,14 @@ else:
         fi4.metric("Processos Arquivados", totais_mes['processos_arquivados'])
 
         st.markdown("---")
-        st.subheader("📊 Histórico Detalhado por Semana")
+        st.markdown("#### Histórico Detalhado por Semana")
         df_semanas = pd.DataFrame(historico_mes).T
         st.dataframe(df_semanas, use_container_width=True)
 
     with tab3:
-        st.header(f"Previsibilidade: Vendido vs. Entregue — {escritorio_selecionado}")
+        st.markdown(f"### Previsibilidade (Vendido x Entregue)\n**{escritorio_selecionado}**")
+        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        
         col_p1, col_p2, col_p3 = st.columns(3)
         col_p1.metric("Total Vendido no Mês", totais_mes['contratos'])
         col_p2.metric("Total Entregue (INSS + JF)", total_entregue_protocolos, f"{totais_mes['inss_geral']} INSS / {totais_mes['jf_iniciais']} JF")
@@ -398,17 +485,21 @@ else:
         col_p3.metric("Índice de Vazão Mensal", f"{indice_vazao:.1f}%", "Meta: 100%")
 
     with tab4:
-        st.header(f"Diagnóstico de Estoques — {escritorio_selecionado}")
+        st.markdown(f"### Diagnóstico de Estoques\n**{escritorio_selecionado}**")
+        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        
         if score_geral == 0:
-            st.info("Preencha as semanas para gerar o diagnóstico.")
+            st.info("Preencha os dados das semanas para gerar o diagnóstico executivo.")
         else:
-            st.error("🚨 **PONTOS DE ATENÇÃO OPERACIONAL**")
-            st.write(f"Há **{total_aguardando} clientes** parados na esteira de envio e demanda reprimida nos protocolos.")
+            st.error("Pontos de Atenção Operacional")
+            st.write(f"Há **{total_aguardando} clientes** parados na esteira aguardando encaminhamento para o contencioso judicial ou administrativo.")
 
     with tab5:
-        st.header("📋 Plano de Ação Estratégico")
+        st.markdown(f"### Plano de Ação Estratégico\n**{escritorio_selecionado}**")
+        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        
         if score_geral == 0:
-            st.info("Preencha as semanas para gerar o plano de ação.")
+            st.info("Preencha os dados das semanas para gerar as diretrizes do plano de ação.")
         else:
-            st.markdown(f"* **Foco Comercial:** Acelerar conversão digital e física frente aos {totais_mes['qualificados']} qualificados.")
+            st.markdown(f"* **Foco Comercial:** Acelerar conversão digital e física frente aos {totais_mes['qualificados']} qualificados registrados no período.")
             st.markdown(f"* **Foco Retenção:** Tratar cancelamentos por desistência ({totais_mes['cancelados_desistencia']}) e docs/direito ({totais_mes['cancelados_docs_direito']}).")
