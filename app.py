@@ -9,159 +9,161 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- DESIGN SYSTEM: SOFTWARE EXECUTIVO SaaS (UI/UX PREMIUM) ---
+# --- DESIGN SYSTEM EXECUTIVO: BLINDAGEM DE CSS & TOKENS OFICIAIS ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
 
     :root {
-        --bg-main: #080F1A;
-        --bg-sidebar: #0D1726;
-        --bg-card: #121D31;
-        --bg-card-secondary: #16233A;
-        --border: #263550;
-
-        --gold: #D6B238;
-        --gold-hover: #E4C456;
-
-        --text-primary: #F4F6FA;
-        --text-secondary: #AAB4C4;
-
-        --input-bg: #F4F5F7;
-        --input-text: #20283A;
-
-        --danger: #C86666;
-        --danger-hover: #D97777;
-
-        --radius-sm: 8px;
-        --radius-md: 10px;
-        --radius-lg: 16px;
-        --radius-xl: 18px;
+        --bg: #080E18;
+        --sidebar: #0D1726;
+        --surface: #111C2E;
+        --surface-2: #152238;
+        --border: #26354D;
+        --text: #F2F4F7;
+        --text-2: #98A4B5;
+        --text-3: #6F7B8D;
+        --gold: #D8B43C;
+        --gold-hover: #E3C355;
+        --danger: #C96C6C;
+        --success: #3F9C6B;
+        --radius-input: 9px;
+        --radius-button: 9px;
+        --radius-card: 14px;
     }
 
-    /* Aplicação Geral */
+    /* Fundo Geral */
     .stApp {
-        background-color: var(--bg-main);
-        color: var(--text-primary);
-        font-family: 'Inter', sans-serif;
+        background-color: var(--bg) !important;
+        color: var(--text) !important;
+        font-family: 'Inter', sans-serif !important;
     }
 
-    /* Sidebar */
+    /* Sidebar Limpa e Alinhada */
     section[data-testid="stSidebar"] {
-        background-color: var(--bg-sidebar);
-        border-right: 1px solid var(--border);
+        background-color: var(--sidebar) !important;
+        border-right: 1px solid var(--border) !important;
+        padding-top: 1rem !important;
     }
-    section[data-testid="stSidebar"] h1, 
-    section[data-testid="stSidebar"] h2, 
-    section[data-testid="stSidebar"] h3, 
-    section[data-testid="stSidebar"] label, 
-    section[data-testid="stSidebar"] span, 
-    section[data-testid="stSidebar"] div, 
-    section[data-testid="stSidebar"] p {
-        color: var(--text-primary) !important;
-        font-family: 'Inter', sans-serif;
+    section[data-testid="stSidebar"] * {
+        font-family: 'Inter', sans-serif !important;
+        color: var(--text) !important;
     }
 
-    /* Tipografia de Títulos Globais */
-    h1, h2, h3, h4 {
-        color: var(--text-primary);
-        font-family: 'Inter', sans-serif;
-        font-weight: 600;
+    /* Tipografia de Títulos */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif !important;
+        color: var(--text) !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em;
+    }
+    .brand-serif {
+        font-family: 'Cormorant Garamond', serif !important;
     }
 
-    /* Inputs e Selects */
+    /* Inputs Padrão */
     div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
-        background-color: var(--input-bg) !important;
-        border-radius: var(--radius-md) !important;
+        background-color: #F3F4F6 !important;
+        border-radius: var(--radius-input) !important;
         border: 1px solid transparent !important;
+        min-height: 42px !important;
     }
     div[data-baseweb="input"] input, div[data-baseweb="select"] span {
-        color: var(--input-text) !important;
+        color: #202738 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
     }
-    .stNumberInput input {
-        background-color: var(--input-bg) !important;
-        color: var(--input-text) !important;
-        border-radius: var(--radius-md) !important;
-        border: 1px solid transparent !important;
-    }
-    .stTextInput input {
-        background-color: var(--input-bg) !important;
-        color: var(--input-text) !important;
-        border-radius: var(--radius-md) !important;
+    .stNumberInput input, .stTextInput input {
+        background-color: #F3F4F6 !important;
+        color: #202738 !important;
+        border-radius: var(--radius-input) !important;
+        font-size: 14px !important;
     }
 
-    /* Formulários Executivos */
+    /* Formulários e Superfícies */
     div[data-testid="stForm"] {
-        background-color: var(--bg-card);
-        padding: 28px;
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        background-color: var(--surface) !important;
+        padding: 24px !important;
+        border-radius: var(--radius-card) !important;
+        border: 1px solid var(--border) !important;
     }
 
-    /* Cards de Métricas */
+    /* Métricas Compactas */
     [data-testid="stMetric"] {
-        background-color: var(--bg-card);
-        padding: 20px;
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border);
-        border-left: 3px solid var(--gold);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    [data-testid="stMetricValue"] {
-        color: var(--text-primary) !important;
-        font-weight: 700;
-        font-family: 'Inter', sans-serif;
+        background-color: var(--surface) !important;
+        padding: 16px 20px !important;
+        border-radius: var(--radius-card) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
     [data-testid="stMetricLabel"] {
-        color: var(--text-secondary) !important;
-        font-size: 13px !important;
-        font-weight: 500;
+        color: var(--text-2) !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    [data-testid="stMetricValue"] {
+        color: var(--text) !important;
+        font-size: 28px !important;
+        font-weight: 700 !important;
     }
 
-    /* Botões Primários Padronizados (Dourados) */
+    /* Botões Primários Dourados */
     .stButton > button[kind="primary"], div.stButton > button:first-child {
         background-color: var(--gold) !important;
-        color: #101827 !important;
+        color: #080E18 !important;
         border: 1px solid var(--gold) !important;
-        border-radius: var(--radius-md) !important;
+        border-radius: var(--radius-button) !important;
         font-weight: 600 !important;
-        font-family: 'Inter', sans-serif !important;
+        height: 42px !important;
         transition: all 0.2s ease !important;
     }
     .stButton > button[kind="primary"]:hover, div.stButton > button:first-child:hover {
         background-color: var(--gold-hover) !important;
         border-color: var(--gold-hover) !important;
-        color: #080F1A !important;
-        box-shadow: 0 0 15px rgba(214, 178, 56, 0.3);
+        color: #080E18 !important;
+        box-shadow: 0 0 12px rgba(216, 180, 60, 0.25);
     }
 
-    /* Abas de Navegação Superior */
+    /* Botões Secundários */
+    .stButton > button[kind="secondary"] {
+        background-color: var(--surface-2) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-button) !important;
+        height: 40px !important;
+        font-weight: 500 !important;
+    }
+    .stButton > button[kind="secondary"]:hover {
+        background-color: #1A2B45 !important;
+        border-color: #3A4C68 !important;
+        color: var(--text) !important;
+    }
+
+    /* Navegação por Abas Limpa */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
-        background-color: transparent;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 0px;
+        gap: 12px;
+        background-color: transparent !important;
+        border-bottom: 1px solid var(--border) !important;
+        margin-bottom: 24px;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: var(--bg-sidebar);
-        border-radius: var(--radius-sm) var(--radius-sm) 0px 0px;
-        color: var(--text-secondary);
-        border: 1px solid var(--border);
-        border-bottom: none;
-        padding: 10px 18px;
-        font-weight: 500;
+        background-color: transparent !important;
+        color: var(--text-3) !important;
+        border: none !important;
+        border-bottom: 2px solid transparent !important;
+        padding: 10px 16px !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #D4D9E1 !important;
     }
     .stTabs [aria-selected="true"] {
-        background-color: var(--bg-card) !important;
-        color: var(--text-primary) !important;
-        border-bottom: 3px solid var(--gold) !important;
+        color: var(--text) !important;
+        border-bottom: 2px solid var(--gold) !important;
         font-weight: 600 !important;
-    }
-
-    /* Estilos de Marca Customizados */
-    .brand-serif {
-        font-family: 'Cormorant Garamond', serif !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -169,7 +171,7 @@ st.markdown("""
 # --- INICIALIZAÇÃO DE DADOS NO SESSION STATE ---
 if 'usuarios' not in st.session_state:
     st.session_state['usuarios'] = {
-        "admin": {"senha": "muller2026", "nome": "Muller Oliveira (Admin)", "tipo": "admin"},
+        "admin": {"senha": "muller2026", "nome": "Muller Oliveira", "tipo": "admin"},
         "escritorio_a": {"senha": "123", "nome": "T.A. Advocacia", "tipo": "cliente"}
     }
 
@@ -181,88 +183,94 @@ if 'base_dados_geral' not in st.session_state:
 if 'usuario_logado' not in st.session_state:
     st.session_state['usuario_logado'] = None
 
-# --- TELA DE AUTENTICAÇÃO (LOGIN / RECUPERAÇÃO) ---
+# --- TELA DE AUTENTICAÇÃO EXECUTIVA ---
 if st.session_state['usuario_logado'] is None:
     st.markdown("""
-        <div style="max-width: 420px; margin: 90px auto; background-color: #0D1726; padding: 42px; border-radius: 18px; border: 1px solid #263550; box-shadow: 0 25px 50px rgba(0,0,0,0.7); text-align: center;">
-            <h2 class="brand-serif" style="color: #F4F6FA; margin-bottom: 4px; font-size: 32px; font-weight: 600; letter-spacing: 2px;">Muller Oliveira</h2>
-            <p style="color: #D6B238; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px; font-weight: 600;">Controladoria & Gestão Executiva</p>
+        <div style="max-width: 400px; margin: 100px auto; background-color: #111C2E; padding: 36px; border-radius: 16px; border: 1px solid #26354D; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center;">
+            <h2 class="brand-serif" style="color: #F2F4F7; margin-bottom: 2px; font-size: 32px; font-weight: 600;">Muller Oliveira</h2>
+            <p style="color: #D8B43C; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 28px; font-weight: 600;">Controladoria & Gestão Executiva</p>
         </div>
     """, unsafe_allow_html=True)
     
     col_l1, col_col, col_l2 = st.columns([1, 1.2, 1])
     with col_col:
-        aba_login, aba_rec = st.tabs(["Acesso Executivo", "Recuperar Senha"])
+        aba_login, aba_rec = st.tabs(["Acesso", "Recuperar"])
         
         with aba_login:
             with st.form("form_login"):
-                st.markdown("<p style='font-size: 13px; color: #AAB4C4; margin-bottom: 12px;'>Entre com suas credenciais corporativas.</p>", unsafe_allow_html=True)
+                st.markdown("<p style='font-size: 13px; color: #98A4B5; margin-bottom: 12px;'>Informe suas credenciais corporativas.</p>", unsafe_allow_html=True)
                 usuario_input = st.text_input("Usuário de acesso")
                 senha_input = st.text_input("Senha", type="password")
-                entrar = st.form_submit_button("Acessar plataforma", icon=":material/login:")
+                entrar = st.form_submit_button("Acessar plataforma", type="primary", use_container_width=True)
                 
                 if entrar:
                     if usuario_input in st.session_state['usuarios'] and st.session_state['usuarios'][usuario_input]['senha'] == senha_input:
                         st.session_state['usuario_logado'] = usuario_input
                         st.rerun()
                     else:
-                        st.error("Credenciais inválidas. Verifique seu usuário e senha.")
+                        st.error("Credenciais inválidas.")
                         
         with aba_rec:
-            st.markdown("<p style='font-size: 13px; color: #AAB4C4; margin-top: 10px;'>Informe seu usuário para solicitar o reestabelecimento de credenciais.</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px; color: #98A4B5; margin-top: 10px;'>Solicite o reestabelecimento ao administrador.</p>", unsafe_allow_html=True)
             user_rec = st.text_input("Usuário cadastrado", key="rec_user")
-            if st.button("Enviar solicitação", icon=":material/send:", type="secondary"):
+            if st.button("Enviar solicitação", type="secondary", use_container_width=True):
                 if user_rec in st.session_state['usuarios']:
-                    st.success("Solicitação enviada. O administrador entrará em contato.")
+                    st.success("Solicitação enviada com sucesso.")
                 else:
-                    st.warning("Usuário não localizado na base.")
+                    st.warning("Usuário não localizado.")
     st.stop()
 
-# --- SESSÃO ATIVA & SIDEBAR EXECUTIVA ---
+# --- SESSÃO ATIVA & SIDEBAR REESTRUTURADA ---
 user_atual = st.session_state['usuario_logado']
 dados_user = st.session_state['usuarios'][user_atual]
 is_admin = dados_user['tipo'] == 'admin'
 
-st.sidebar.markdown(f"**Sessão Ativa**\n\n`{dados_user['nome']}`")
-if st.sidebar.button("Encerrar sessão", icon=":material/logout:", type="secondary"):
+st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 4px;'>Sessão ativa</div>", unsafe_allow_html=True)
+st.sidebar.markdown(f"""
+    <div style="background-color: #152238; border: 1px solid #26354D; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;">
+        <div style="font-size: 13px; font-weight: 500; color: #F2F4F7;">{dados_user['nome']}</div>
+        <div style="font-size: 11px; color: #98A4B5; margin-top: 2px;">{'Administrador' : 'Cliente Corporativo'}</div>
+    </div>
+""", unsafe_allow_html=True)
+
+if st.sidebar.button("Encerrar sessão", type="secondary", use_container_width=True):
     st.session_state['usuario_logado'] = None
     st.rerun()
 
 st.sidebar.markdown("---")
 
 if is_admin:
-    st.sidebar.markdown("### Painel do Consultor")
+    st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 8px;'>Painel do Consultor</div>", unsafe_allow_html=True)
     
     with st.sidebar.expander("Gerenciar escritórios", expanded=False):
         with st.form("cad_escritorio"):
-            st.markdown("**Cadastrar novo escritório**")
+            st.markdown("**Novo Escritório**")
             novo_id = st.text_input("Usuário de acesso", placeholder="escritorio_b")
             novo_nome = st.text_input("Nome do escritório", placeholder="Nayara Lira Advocacia")
             nova_senha = st.text_input("Senha", type="password")
-            salvar_escritorio = st.form_submit_button("Criar acesso", icon=":material/add_business:")
+            salvar_escritorio = st.form_submit_button("Criar acesso", type="primary", use_container_width=True)
             
             if salvar_escritorio:
                 if novo_id and novo_nome and nova_senha:
                     st.session_state['usuarios'][novo_id] = {"senha": nova_senha, "nome": novo_nome, "tipo": "cliente"}
                     if novo_nome not in st.session_state['base_dados_geral']:
                         st.session_state['base_dados_geral'][novo_nome] = {}
-                    st.success(f"Escritório '{novo_nome}' criado com sucesso!")
+                    st.success(f"Escritório '{novo_nome}' criado.")
                     st.rerun()
                 else:
-                    st.error("Preencha todos os campos obrigatórios.")
+                    st.error("Preencha todos os campos.")
 
         st.markdown("---")
-        st.markdown("**Remover escritório**")
         lista_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
         if lista_clientes:
-            escritorio_para_excluir = st.selectbox("Selecione o escritório", lista_clientes, key="del_esc")
-            if st.button("Excluir escritório", icon=":material/delete:", type="secondary"):
+            escritorio_para_excluir = st.selectbox("Remover escritório", lista_clientes, key="del_esc")
+            if st.button("Excluir escritório", type="secondary", use_container_width=True):
                 chave_del = [k for k, v in st.session_state['usuarios'].items() if v['nome'] == escritorio_para_excluir]
                 if chave_del:
                     del st.session_state['usuarios'][chave_del[0]]
                 if escritorio_para_excluir in st.session_state['base_dados_geral']:
                     del st.session_state['base_dados_geral'][escritorio_para_excluir]
-                st.success(f"Escritório '{escritorio_para_excluir}' removido.")
+                st.success("Removido com sucesso.")
                 st.rerun()
         else:
             st.info("Nenhum cliente cadastrado.")
@@ -270,7 +278,8 @@ if is_admin:
     st.sidebar.markdown("---")
     lista_nomes_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
     if lista_nomes_clientes:
-        escritorio_selecionado = st.sidebar.selectbox("Escritório ativo", lista_nomes_clientes)
+        st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 4px;'>Escritório Ativo</div>", unsafe_allow_html=True)
+        escritorio_selecionado = st.sidebar.selectbox("Selecionar escritório ativo", lista_nomes_clientes, label_visibility="collapsed")
     else:
         escritorio_selecionado = "Nenhum"
 else:
@@ -278,7 +287,7 @@ else:
     if escritorio_selecionado not in st.session_state['base_dados_geral']:
         st.session_state['base_dados_geral'][escritorio_selecionado] = {}
 
-st.sidebar.markdown("### Período de Competência")
+st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 8px;'>Período de Competência</div>", unsafe_allow_html=True)
 meses_do_ano = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
 mes_escolhido = st.sidebar.selectbox("Mês", meses_do_ano, index=7)
 ano_escolhido = st.sidebar.number_input("Ano", min_value=2024, max_value=2035, value=2026)
@@ -286,16 +295,16 @@ mes_ano_str = f"{mes_escolhido}/{ano_escolhido}"
 
 semana_atual = st.sidebar.selectbox("Semana de Referência", ["Semana 1", "Semana 2", "Semana 3", "Semana 4"])
 
-# --- CABEÇALHO PRINCIPAL EXECUTIVO ---
+# --- CABEÇALHO EXECUTIVO MINIMALISTA ---
 st.markdown(f"""
-    <div style="background-color: #0D1726; padding: 28px 36px; border-radius: 16px; border: 1px solid #263550; border-bottom: 4px solid #D6B238; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+    <div style="background-color: #0D1726; padding: 26px 36px; border-radius: 14px; border: 1px solid #26354D; border-bottom: 3px solid #D8B43C; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
         <div>
-            <h1 class="brand-serif" style="margin: 0; font-size: 30px; letter-spacing: 2px; color: #F4F6FA !important; font-weight: 600;">Muller Oliveira</h1>
-            <p style="margin: 6px 0 0 0; font-size: 11px; letter-spacing: 4px; color: #D6B238 !important; text-transform: uppercase; font-weight: 600;">Controladoria & Gestão Executiva</p>
+            <h1 class="brand-serif" style="margin: 0; font-size: 36px; font-weight: 600; line-height: 1; color: #F2F4F7 !important;">Muller Oliveira</h1>
+            <p style="margin: 12px 0 0 0; font-size: 11px; letter-spacing: 0.28em; color: #A9B1BF !important; text-transform: uppercase; font-weight: 600;">Controladoria & Gestão Executiva</p>
         </div>
-        <div style="text-align: right; background-color: #121D31; border: 1px solid #263550; padding: 10px 18px; border-radius: 10px;">
-            <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #AAB4C4; margin-bottom: 2px;">Cliente Ativo</div>
-            <div style="font-size: 15px; font-weight: 600; color: #F4F6FA;">{escritorio_selecionado}</div>
+        <div style="background-color: #111C2E; border: 1px solid #26354D; padding: 12px 16px; border-radius: 10px;">
+            <div style="font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #8E99A9; margin-bottom: 2px;">Cliente Ativo</div>
+            <div style="font-size: 14px; font-weight: 600; color: #F2F4F7;">{escritorio_selecionado}</div>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -325,17 +334,21 @@ else:
     with tab1:
         col_t1, col_t2 = st.columns([3, 1])
         with col_t1:
-            st.markdown(f"### Lançamento Semanal\n**{escritorio_selecionado}** · {mes_escolhido} de {ano_escolhido} · {semana_atual}")
+            st.markdown(f"""
+                <div style="margin-bottom: 28px;">
+                    <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Lançamento semanal</h2>
+                    <div style="font-size: 15px; font-weight: 500; color: #98A4B5;"><span style="color: #F2F4F7;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido} · {semana_atual}</div>
+                </div>
+            """, unsafe_allow_html=True)
         with col_t2:
-            if st.button("Limpar dados da semana", icon=":material/cleaning_services:", type="secondary"):
+            st.markdown("<div style='padding-top: 4px;'></div>", unsafe_allow_html=True)
+            if st.button("Limpar dados da semana", type="secondary"):
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {}
                 st.success(f"Dados da {semana_atual} limpos.")
                 st.rerun()
 
-        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
-
         with st.form(f"form_{escritorio_selecionado}_{mes_ano_str}_{semana_atual}"):
-            col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2, gap="large")
             with col1:
                 st.markdown("#### Comercial (Físico & Digital)")
                 leads_fisico = st.number_input("Atendimentos Comercial Físico", value=int(dados_semana_salvos.get('leads_fisico', 0)))
@@ -388,8 +401,8 @@ else:
                 estagiarios = st.number_input("Estagiários", value=int(dados_semana_salvos.get('estagiarios', 0)))
                 auxiliares = st.number_input("Auxiliares", value=int(dados_semana_salvos.get('auxiliares', 0)))
 
-            st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
-            submitted = st.form_submit_button("Salvar alterações", icon=":material/save:", type="primary")
+            st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
+            submitted = st.form_submit_button("Salvar alterações", type="primary", use_container_width=True)
             if submitted:
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {
                     'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada,
@@ -434,59 +447,71 @@ else:
         score_geral = (score_comercial * 0.20) + (score_financeiro * 0.20) + (score_operacao * 0.30) + (score_cliente * 0.15) + (score_gestao * 0.15)
 
     with tab2:
-        st.markdown(f"### Consolidado Mensal\n**{escritorio_selecionado}** · {mes_escolhido} de {ano_escolhido}")
-        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="margin-bottom: 28px;">
+                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Consolidado mensal</h2>
+                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;"><span style="color: #F2F4F7;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido}</div>
+            </div>
+        """, unsafe_allow_html=True)
         
-        c1, c2, c3, c4 = st.columns(4)
+        c1, c2, c3, c4 = st.columns(4, gap="medium")
         status_score = "Aguardando dados" if score_geral == 0 else "Consolidado"
         c1.metric("Score de Gestão", f"{score_geral:.0f} / 100", status_score)
         c2.metric("Total Vendido", totais_mes['contratos'])
         c3.metric("Faturamento", f"R$ {totais_mes['faturamento']:,.2f}")
         c4.metric("Recebido Efetivo", f"R$ {totais_mes['recebido']:,.2f}")
 
-        st.markdown("---")
+        st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### Comercial (Físico x Digital)")
-        f1, f2, f3, f4 = st.columns(4)
+        f1, f2, f3, f4 = st.columns(4, gap="medium")
         f1.metric("Comercial Físico", totais_mes['leads_fisico'])
         f2.metric("Comercial Digital", totais_mes['leads_digital'])
         f3.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
         f4.metric("Receita Contratada", f"R$ {totais_mes['receita_contratada']:,.2f}")
 
-        st.markdown("---")
+        st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### Produção Operacional (INSS & JF)")
-        op1, op2, op3, op4 = st.columns(4)
+        op1, op2, op3, op4 = st.columns(4, gap="medium")
         op1.metric("Total Protocolos INSS", totais_mes['inss_geral'])
         op2.metric("Total Iniciais JF", totais_mes['jf_iniciais'])
-        op3.metric("Aposentadorias (INSS+JF)", totais_mes['inss_apos_idade'] + totais_mes['inss_apos_tempo'] + totais_mes['jf_apos_idade'] + totais_mes['jf_apos_tempo'])
+        op3.metric("Aposentadorias", totais_mes['inss_apos_idade'] + totais_mes['inss_apos_tempo'] + totais_mes['jf_apos_idade'] + totais_mes['jf_apos_tempo'])
         op4.metric("Auxílio Doença", totais_mes['inss_aux_doenca'])
 
-        st.markdown("---")
+        st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### Financeiro & Controladoria")
-        fi1, fi2, fi3, fi4 = st.columns(4)
+        fi1, fi2, fi3, fi4 = st.columns(4, gap="medium")
         fi1.metric("Inadimplência", f"{inadimplencia_pct:.1f}%", f"R$ {totais_mes['vencido']:,.2f}")
         fi2.metric("RPV / Precatórios", f"R$ {totais_mes['rpv_precatorio']:,.2f}")
-        fi3.metric("Pagamento Administrativo", f"R$ {totais_mes['pagamento_adm']:,.2f}")
+        fi3.metric("Pagamento Adm.", f"R$ {totais_mes['pagamento_adm']:,.2f}")
         fi4.metric("Processos Arquivados", totais_mes['processos_arquivados'])
 
-        st.markdown("---")
-        st.markdown("#### Histórico Detalhado por Semana")
+        st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
+        st.markdown("#### Histórico detalhado por semana")
         df_semanas = pd.DataFrame(historico_mes).T
         st.dataframe(df_semanas, use_container_width=True)
 
     with tab3:
-        st.markdown(f"### Previsibilidade (Vendido x Entregue)\n**{escritorio_selecionado}**")
-        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="margin-bottom: 28px;">
+                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Previsibilidade</h2>
+                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;">Vendido x Entregue · <span style="color: #F2F4F7;">{escritorio_selecionado}</span></div>
+            </div>
+        """, unsafe_allow_html=True)
         
-        col_p1, col_p2, col_p3 = st.columns(3)
+        col_p1, col_p2, col_p3 = st.columns(3, gap="medium")
         col_p1.metric("Total Vendido no Mês", totais_mes['contratos'])
         col_p2.metric("Total Entregue (INSS + JF)", total_entregue_protocolos, f"{totais_mes['inss_geral']} INSS / {totais_mes['jf_iniciais']} JF")
         
         indice_vazao = (total_entregue_protocolos / totais_mes['contratos'] * 100) if totais_mes['contratos'] > 0 else 0
-        col_p3.metric("Índice de Vazão Mensal", f"{indice_vazao:.1f}%", "Meta: 100%")
+        col_p3.metric("Índice de Vazão", f"{indice_vazao:.1f}%", "Meta: 100%")
 
     with tab4:
-        st.markdown(f"### Diagnóstico de Estoques\n**{escritorio_selecionado}**")
-        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="margin-bottom: 28px;">
+                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Diagnóstico</h2>
+                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;">Análise de estoques · <span style="color: #F2F4F7;">{escritorio_selecionado}</span></div>
+            </div>
+        """, unsafe_allow_html=True)
         
         if score_geral == 0:
             st.info("Preencha os dados das semanas para gerar o diagnóstico executivo.")
@@ -495,8 +520,12 @@ else:
             st.write(f"Há **{total_aguardando} clientes** parados na esteira aguardando encaminhamento para o contencioso judicial ou administrativo.")
 
     with tab5:
-        st.markdown(f"### Plano de Ação Estratégico\n**{escritorio_selecionado}**")
-        st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+        st.markdown(f"""
+            <div style="margin-bottom: 28px;">
+                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Plano de ação</h2>
+                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;">Diretrizes estratégicas · <span style="color: #F2F4F7;">{escritorio_selecionado}</span></div>
+            </div>
+        """, unsafe_allow_html=True)
         
         if score_geral == 0:
             st.info("Preencha os dados das semanas para gerar as diretrizes do plano de ação.")
