@@ -420,9 +420,19 @@ else:
                 st.success(f"Dados da {semana_atual} limpos.")
                 st.rerun()
 
-        with st.form(f"form_{escritorio_selecionado}_{mes_ano_str}_{semana_atual}"):
-            col1, col2 = st.columns(2, gap="large")
-            with col1:
+        # --- ABAS DE SETORES NO LANÇAMENTO SEMANAL ---
+        sub_tab_com, sub_tab_adm, sub_tab_jud, sub_tab_fin, sub_tab_cs, sub_tab_eq = st.tabs([
+            "1. Comercial", 
+            "2. Administrativo", 
+            "3. Judicial", 
+            "4. Financeiro", 
+            "5. Sucesso do Cliente", 
+            "6. Equipe Ativa"
+        ])
+
+        with st.form(f"form_setores_{escritorio_selecionado}_{mes_ano_str}_{semana_atual}"):
+            
+            with sub_tab_com:
                 st.markdown("#### Comercial (Físico & Digital)")
                 leads = st.number_input("Quantidade de Leads", value=int(dados_semana_salvos.get('leads', 0)))
                 leads_fisico = st.number_input("Atendimentos Comercial Físico", value=int(dados_semana_salvos.get('leads_fisico', 0)))
@@ -431,21 +441,65 @@ else:
                 contratos = st.number_input("Contratos fechados (Vendido)", value=int(dados_semana_salvos.get('contratos', 0)))
                 receita_contratada = st.number_input("Receita contratada (R$)", value=float(dados_semana_salvos.get('receita_contratada', 0.0)))
                 comercial_cancelados = st.number_input("Comercial: Quantidade de Cancelados / Desistências", value=int(dados_semana_salvos.get('comercial_cancelados', 0)))
-                
-                st.markdown("#### Operacional Administrativo (INSS)")
+
+            with sub_tab_adm:
+                st.markdown("#### Operacional Administrativo (INSS) - Protocolos, Deferimentos e Indeferimentos")
                 inss_geral = st.number_input("Protocolos Adm. INSS Totais", value=int(dados_semana_salvos.get('inss_geral', 0)))
-                inss_apos_idade = st.number_input("INSS: Aposentadoria por Idade", value=int(dados_semana_salvos.get('inss_apos_idade', 0)))
-                inss_apos_idade_rural = st.number_input("INSS: Aposentadoria por Idade Rural", value=int(dados_semana_salvos.get('inss_apos_idade_rural', 0)))
-                inss_apos_tempo = st.number_input("INSS: Aposentadoria por Tempo/Contribuição", value=int(dados_semana_salvos.get('inss_apos_tempo', 0)))
-                inss_invalidez = st.number_input("INSS: Aposentadoria por Invalidez", value=int(dados_semana_salvos.get('inss_invalidez', 0)))
-                inss_pensao = st.number_input("INSS: Pensão por Morte", value=int(dados_semana_salvos.get('inss_pensao', 0)))
-                inss_aux_doenca = st.number_input("INSS: Auxílio Doença / Incapacidade", value=int(dados_semana_salvos.get('inss_aux_doenca', 0)))
-                inss_incapacidade_rural = st.number_input("INSS: Benefício por Incapacidade Rural", value=int(dados_semana_salvos.get('inss_incapacidade_rural', 0)))
-                inss_sal_maternidade = st.number_input("INSS: Salário Maternidade", value=int(dados_semana_salvos.get('inss_sal_maternidade', 0)))
-                inss_aux_acidente = st.number_input("INSS: Auxílio-Acidente", value=int(dados_semana_salvos.get('inss_aux_acidente', 0)))
-                inss_bpc_idoso = st.number_input("INSS: BPC Idoso", value=int(dados_semana_salvos.get('inss_bpc_idoso', 0)))
-                inss_bpc_deficiente = st.number_input("INSS: BPC Deficiente", value=int(dados_semana_salvos.get('inss_bpc_deficiente', 0)))
                 
+                st.markdown("##### Detalhamento por Benefício (Adm)")
+                
+                col_a1, col_a2, col_a3 = st.columns(3)
+                with col_a1:
+                    inss_apos_idade = st.number_input("Aposentadoria por Idade (Prot)", value=int(dados_semana_salvos.get('inss_apos_idade', 0)))
+                    inss_apos_idade_def = st.number_input("Aposentadoria por Idade (Def)", value=int(dados_semana_salvos.get('inss_apos_idade_def', 0)))
+                    inss_apos_idade_ind = st.number_input("Aposentadoria por Idade (Ind)", value=int(dados_semana_salvos.get('inss_apos_idade_ind', 0)))
+                with col_a2:
+                    inss_apos_idade_rural = st.number_input("Apos. Idade Rural (Prot)", value=int(dados_semana_salvos.get('inss_apos_idade_rural', 0)))
+                    inss_apos_idade_rural_def = st.number_input("Apos. Idade Rural (Def)", value=int(dados_semana_salvos.get('inss_apos_idade_rural_def', 0)))
+                    inss_apos_idade_rural_ind = st.number_input("Apos. Idade Rural (Ind)", value=int(dados_semana_salvos.get('inss_apos_idade_rural_ind', 0)))
+                with col_a3:
+                    inss_apos_tempo = st.number_input("Apos. Tempo/Contrib. (Prot)", value=int(dados_semana_salvos.get('inss_apos_tempo', 0)))
+                    inss_apos_tempo_def = st.number_input("Apos. Tempo/Contrib. (Def)", value=int(dados_semana_salvos.get('inss_apos_tempo_def', 0)))
+                    inss_apos_tempo_ind = st.number_input("Apos. Tempo/Contrib. (Ind)", value=int(dados_semana_salvos.get('inss_apos_tempo_ind', 0)))
+
+                col_b1, col_b2, col_b3 = st.columns(3)
+                with col_b1:
+                    inss_invalidez = st.number_input("Apos. Invalidez (Prot)", value=int(dados_semana_salvos.get('inss_invalidez', 0)))
+                    inss_invalidez_def = st.number_input("Apos. Invalidez (Def)", value=int(dados_semana_salvos.get('inss_invalidez_def', 0)))
+                    inss_invalidez_ind = st.number_input("Apos. Invalidez (Ind)", value=int(dados_semana_salvos.get('inss_invalidez_ind', 0)))
+                with col_b2:
+                    inss_pensao = st.number_input("Pensão por Morte (Prot)", value=int(dados_semana_salvos.get('inss_pensao', 0)))
+                    inss_pensao_def = st.number_input("Pensão por Morte (Def)", value=int(dados_semana_salvos.get('inss_pensao_def', 0)))
+                    inss_pensao_ind = st.number_input("Pensão por Morte (Ind)", value=int(dados_semana_salvos.get('inss_pensao_ind', 0)))
+                with col_b3:
+                    inss_aux_doenca = st.number_input("Auxílio Doença (Prot)", value=int(dados_semana_salvos.get('inss_aux_doenca', 0)))
+                    inss_aux_doenca_def = st.number_input("Auxílio Doença (Def)", value=int(dados_semana_salvos.get('inss_aux_doenca_def', 0)))
+                    inss_aux_doenca_ind = st.number_input("Auxílio Doença (Ind)", value=int(dados_semana_salvos.get('inss_aux_doenca_ind', 0)))
+
+                col_c1, col_c2, col_c3 = st.columns(3)
+                with col_c1:
+                    inss_incapacidade_rural = st.number_input("Incapacidade Rural (Prot)", value=int(dados_semana_salvos.get('inss_incapacidade_rural', 0)))
+                    inss_incapacidade_rural_def = st.number_input("Incapacidade Rural (Def)", value=int(dados_semana_salvos.get('inss_incapacidade_rural_def', 0)))
+                    inss_incapacidade_rural_ind = st.number_input("Incapacidade Rural (Ind)", value=int(dados_semana_salvos.get('inss_incapacidade_rural_ind', 0)))
+                with col_c2:
+                    inss_sal_maternidade = st.number_input("Salário Maternidade (Prot)", value=int(dados_semana_salvos.get('inss_sal_maternidade', 0)))
+                    inss_sal_maternidade_def = st.number_input("Salário Maternidade (Def)", value=int(dados_semana_salvos.get('inss_sal_maternidade_def', 0)))
+                    inss_sal_maternidade_ind = st.number_input("Salário Maternidade (Ind)", value=int(dados_semana_salvos.get('inss_sal_maternidade_ind', 0)))
+                with col_c3:
+                    inss_aux_acidente = st.number_input("Auxílio-Acidente (Prot)", value=int(dados_semana_salvos.get('inss_aux_acidente', 0)))
+                    inss_aux_acidente_def = st.number_input("Auxílio-Acidente (Def)", value=int(dados_semana_salvos.get('inss_aux_acidente_def', 0)))
+                    inss_aux_acidente_ind = st.number_input("Auxílio-Acidente (Ind)", value=int(dados_semana_salvos.get('inss_aux_acidente_ind', 0)))
+
+                col_d1, col_d2 = st.columns(2)
+                with col_d1:
+                    inss_bpc_idoso = st.number_input("BPC Idoso (Prot)", value=int(dados_semana_salvos.get('inss_bpc_idoso', 0)))
+                    inss_bpc_idoso_def = st.number_input("BPC Idoso (Def)", value=int(dados_semana_salvos.get('inss_bpc_idoso_def', 0)))
+                    inss_bpc_idoso_ind = st.number_input("BPC Idoso (Ind)", value=int(dados_semana_salvos.get('inss_bpc_idoso_ind', 0)))
+                with col_d2:
+                    inss_bpc_deficiente = st.number_input("BPC Deficiente (Prot)", value=int(dados_semana_salvos.get('inss_bpc_deficiente', 0)))
+                    inss_bpc_deficiente_def = st.number_input("BPC Deficiente (Def)", value=int(dados_semana_salvos.get('inss_bpc_deficiente_def', 0)))
+                    inss_bpc_deficiente_ind = st.number_input("BPC Deficiente (Ind)", value=int(dados_semana_salvos.get('inss_bpc_deficiente_ind', 0)))
+
                 st.markdown("##### Perícias, Exigências & Encaminhamentos (Adm)")
                 adm_pericia_agendada = st.number_input("Adm: Perícias agendadas", value=int(dados_semana_salvos.get('adm_pericia_agendada', 0)))
                 adm_pericia_realizada = st.number_input("Adm: Perícias realizadas", value=int(dados_semana_salvos.get('adm_pericia_realizada', 0)))
@@ -464,27 +518,50 @@ else:
                 adm_retrabalho = st.number_input("Adm: Retrabalho/Reprotocolo", value=int(dados_semana_salvos.get('adm_retrabalho', 0)))
                 adm_cancelados = st.number_input("Adm: Quantidade de Cancelados / Desistências", value=int(dados_semana_salvos.get('adm_cancelados', 0)))
 
-                st.markdown("#### Financeiro")
-                faturamento = st.number_input("Faturamento emitido (R$)", value=float(dados_semana_salvos.get('faturamento', 0.0)))
-                recebido = st.number_input("Valor efetivamente recebido (R$)", value=float(dados_semana_salvos.get('recebido', 0.0)))
-                vencido = st.number_input("Valor vencido / inadimplente (R$)", value=float(dados_semana_salvos.get('vencido', 0.0)))
-                rpv_precatorio = st.number_input("RPV / Precatório recebidos (R$)", value=float(dados_semana_salvos.get('rpv_precatorio', 0.0)))
-                pagamento_adm = st.number_input("Pagamento Administrativo (R$)", value=float(dados_semana_salvos.get('pagamento_adm', 0.0)))
-
-            with col2:
-                st.markdown("#### Operacional Judicial")
+            with sub_tab_jud:
+                st.markdown("#### Operacional Judicial - Protocolos, Deferimentos e Indeferimentos")
                 judicial_iniciais = st.number_input("Protocolos Iniciais Judiciais Totais", value=int(dados_semana_salvos.get('judicial_iniciais', 0)))
-                judicial_apos_idade = st.number_input("Judicial: Aposentadoria por Idade", value=int(dados_semana_salvos.get('judicial_apos_idade', 0)))
-                judicial_apos_idade_rural = st.number_input("Judicial: Aposentadoria por Idade Rural", value=int(dados_semana_salvos.get('judicial_apos_idade_rural', 0)))
-                judicial_apos_tempo = st.number_input("Judicial: Aposentadoria por Tempo", value=int(dados_semana_salvos.get('judicial_apos_tempo', 0)))
-                judicial_invalidez = st.number_input("Judicial: Aposentadoria por Invalidez", value=int(dados_semana_salvos.get('judicial_invalidez', 0)))
-                judicial_pensao = st.number_input("Judicial: Pensão por Morte", value=int(dados_semana_salvos.get('judicial_pensao', 0)))
-                judicial_sal_maternidade = st.number_input("Judicial: Salário Maternidade", value=int(dados_semana_salvos.get('judicial_sal_maternidade', 0)))
-                judicial_aux_acidente = st.number_input("Judicial: Auxílio-Acidente", value=int(dados_semana_salvos.get('judicial_aux_acidente', 0)))
-                judicial_incapacidade_rural = st.number_input("Judicial: Benefício por Incapacidade Rural", value=int(dados_semana_salvos.get('judicial_incapacidade_rural', 0)))
-                judicial_bpc_idoso = st.number_input("Judicial: BPC Idoso", value=int(dados_semana_salvos.get('judicial_bpc_idoso', 0)))
-                judicial_bpc_deficiente = st.number_input("Judicial: BPC Deficiente", value=int(dados_semana_salvos.get('judicial_bpc_deficiente', 0)))
                 
+                st.markdown("##### Detalhamento por Benefício (Judicial)")
+                
+                col_j1, col_j2, col_j3 = st.columns(3)
+                with col_j1:
+                    judicial_apos_idade = st.number_input("Judicial: Apos. Idade (Prot)", value=int(dados_semana_salvos.get('judicial_apos_idade', 0)))
+                    judicial_apos_idade_def = st.number_input("Judicial: Apos. Idade (Def)", value=int(dados_semana_salvos.get('judicial_apos_idade_def', 0)))
+                    judicial_apos_idade_ind = st.number_input("Judicial: Apos. Idade (Ind)", value=int(dados_semana_salvos.get('judicial_apos_idade_ind', 0)))
+                with col_j2:
+                    judicial_apos_idade_rural = st.number_input("Judicial: Apos. Idade Rural (Prot)", value=int(dados_semana_salvos.get('judicial_apos_idade_rural', 0)))
+                    judicial_apos_idade_rural_def = st.number_input("Judicial: Apos. Idade Rural (Def)", value=int(dados_semana_salvos.get('judicial_apos_idade_rural_def', 0)))
+                    judicial_apos_idade_rural_ind = st.number_input("Judicial: Apos. Idade Rural (Ind)", value=int(dados_semana_salvos.get('judicial_apos_idade_rural_ind', 0)))
+                with col_j3:
+                    judicial_apos_tempo = st.number_input("Judicial: Apos. Tempo (Prot)", value=int(dados_semana_salvos.get('judicial_apos_tempo', 0)))
+                    judicial_apos_tempo_def = st.number_input("Judicial: Apos. Tempo (Def)", value=int(dados_semana_salvos.get('judicial_apos_tempo_def', 0)))
+                    judicial_apos_tempo_ind = st.number_input("Judicial: Apos. Tempo (Ind)", value=int(dados_semana_salvos.get('judicial_apos_tempo_ind', 0)))
+
+                col_k1, col_k2, col_k3 = st.columns(3)
+                with col_k1:
+                    judicial_invalidez = st.number_input("Judicial: Invalidez (Prot)", value=int(dados_semana_salvos.get('judicial_invalidez', 0)))
+                    judicial_invalidez_def = st.number_input("Judicial: Invalidez (Def)", value=int(dados_semana_salvos.get('judicial_invalidez_def', 0)))
+                    judicial_invalidez_ind = st.number_input("Judicial: Invalidez (Ind)", value=int(dados_semana_salvos.get('judicial_invalidez_ind', 0)))
+                with col_k2:
+                    judicial_pensao = st.number_input("Judicial: Pensão por Morte (Prot)", value=int(dados_semana_salvos.get('judicial_pensao', 0)))
+                    judicial_pensao_def = st.number_input("Judicial: Pensão por Morte (Def)", value=int(dados_semana_salvos.get('judicial_pensao_def', 0)))
+                    judicial_pensao_ind = st.number_input("Judicial: Pensão por Morte (Ind)", value=int(dados_semana_salvos.get('judicial_pensao_ind', 0)))
+                with col_k3:
+                    judicial_incapacidade_rural = st.number_input("Judicial: Incapacidade Rural (Prot)", value=int(dados_semana_salvos.get('judicial_incapacidade_rural', 0)))
+                    judicial_incapacidade_rural_def = st.number_input("Judicial: Incapacidade Rural (Def)", value=int(dados_semana_salvos.get('judicial_incapacidade_rural_def', 0)))
+                    judicial_incapacidade_rural_ind = st.number_input("Judicial: Incapacidade Rural (Ind)", value=int(dados_semana_salvos.get('judicial_incapacidade_rural_ind', 0)))
+
+                col_l1, col_l2 = st.columns(2)
+                with col_l1:
+                    judicial_bpc_idoso = st.number_input("Judicial: BPC Idoso (Prot)", value=int(dados_semana_salvos.get('judicial_bpc_idoso', 0)))
+                    judicial_bpc_idoso_def = st.number_input("Judicial: BPC Idoso (Def)", value=int(dados_semana_salvos.get('judicial_bpc_idoso_def', 0)))
+                    judicial_bpc_idoso_ind = st.number_input("Judicial: BPC Idoso (Ind)", value=int(dados_semana_salvos.get('judicial_bpc_idoso_ind', 0)))
+                with col_l2:
+                    judicial_bpc_deficiente = st.number_input("Judicial: BPC Deficiente (Prot)", value=int(dados_semana_salvos.get('judicial_bpc_deficiente', 0)))
+                    judicial_bpc_deficiente_def = st.number_input("Judicial: BPC Deficiente (Def)", value=int(dados_semana_salvos.get('judicial_bpc_deficiente_def', 0)))
+                    judicial_bpc_deficiente_ind = st.number_input("Judicial: BPC Deficiente (Ind)", value=int(dados_semana_salvos.get('judicial_bpc_deficiente_ind', 0)))
+
                 judicial_emendas = st.number_input("Judicial: Emendas às iniciais", value=int(dados_semana_salvos.get('judicial_emendas', 0)))
                 judicial_pericia_agendada = st.number_input("Judicial: Perícias agendadas", value=int(dados_semana_salvos.get('judicial_pericia_agendada', 0)))
                 judicial_pericia_realizada = st.number_input("Judicial: Perícias realizadas", value=int(dados_semana_salvos.get('judicial_pericia_realizada', 0)))
@@ -504,6 +581,15 @@ else:
                 prazos_perdidos = st.number_input("Prazos perdidos", value=int(dados_semana_salvos.get('prazos_perdidos', 0)))
                 acordos_homologados = st.number_input("Acordos homologados", value=int(dados_semana_salvos.get('acordos_homologados', 0)))
 
+            with sub_tab_fin:
+                st.markdown("#### Financeiro")
+                faturamento = st.number_input("Faturamento emitido (R$)", value=float(dados_semana_salvos.get('faturamento', 0.0)))
+                recebido = st.number_input("Valor efetivamente recebido (R$)", value=float(dados_semana_salvos.get('recebido', 0.0)))
+                vencido = st.number_input("Valor vencido / inadimplente (R$)", value=float(dados_semana_salvos.get('vencido', 0.0)))
+                rpv_precatorio = st.number_input("RPV / Precatório recebidos (R$)", value=float(dados_semana_salvos.get('rpv_precatorio', 0.0)))
+                pagamento_adm = st.number_input("Pagamento Administrativo (R$)", value=float(dados_semana_salvos.get('pagamento_adm', 0.0)))
+
+            with sub_tab_cs:
                 st.markdown("#### Sucesso do Cliente & Controladoria")
                 cs_contatos = st.number_input("Contatos de relacionamento CS", value=int(dados_semana_salvos.get('cs_contatos', 0)))
                 nps = st.number_input("NPS (Net Promoter Score)", value=float(dados_semana_salvos.get('nps', 0.0)))
@@ -514,7 +600,8 @@ else:
                 avaliacoes_google = st.number_input("Novas avaliações no Google", value=int(dados_semana_salvos.get('avaliacoes_google', 0)))
                 cancelados_desistencia = st.number_input("Cancelados por Desistência (Geral CS)", value=int(dados_semana_salvos.get('cancelados_desistencia', 0)))
                 cancelados_docs_direito = st.number_input("Cancelados - Docs/Direito", value=int(dados_semana_salvos.get('cancelados_docs_direito', 0)))
-                
+
+            with sub_tab_eq:
                 st.markdown("#### Equipe Ativa por Área")
                 eq_comercial = st.number_input("Equipe: Comercial", value=int(dados_semana_salvos.get('eq_comercial', 0)))
                 eq_financeiro = st.number_input("Equipe: Financeiro", value=int(dados_semana_salvos.get('eq_financeiro', 0)))
@@ -527,13 +614,30 @@ else:
             if submitted:
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {
                     'leads': leads, 'leads_fisico': leads_fisico, 'leads_digital': leads_digital, 'qualificados': qualificados, 'contratos': contratos, 'receita_contratada': receita_contratada, 'comercial_cancelados': comercial_cancelados,
-                    'inss_geral': inss_geral, 'inss_apos_idade': inss_apos_idade, 'inss_apos_idade_rural': inss_apos_idade_rural, 'inss_apos_tempo': inss_apos_tempo, 'inss_invalidez': inss_invalidez, 'inss_pensao': inss_pensao, 'inss_aux_doenca': inss_aux_doenca, 
-                    'inss_incapacidade_rural': inss_incapacidade_rural, 'inss_sal_maternidade': inss_sal_maternidade, 'inss_aux_acidente': inss_aux_acidente, 'inss_bpc_idoso': inss_bpc_idoso, 'inss_bpc_deficiente': inss_bpc_deficiente,
+                    'inss_geral': inss_geral, 
+                    'inss_apos_idade': inss_apos_idade, 'inss_apos_idade_def': inss_apos_idade_def, 'inss_apos_idade_ind': inss_apos_idade_ind,
+                    'inss_apos_idade_rural': inss_apos_idade_rural, 'inss_apos_idade_rural_def': inss_apos_idade_rural_def, 'inss_apos_idade_rural_ind': inss_apos_idade_rural_ind,
+                    'inss_apos_tempo': inss_apos_tempo, 'inss_apos_tempo_def': inss_apos_tempo_def, 'inss_apos_tempo_ind': inss_apos_tempo_ind,
+                    'inss_invalidez': inss_invalidez, 'inss_invalidez_def': inss_invalidez_def, 'inss_invalidez_ind': inss_invalidez_ind,
+                    'inss_pensao': inss_pensao, 'inss_pensao_def': inss_pensao_def, 'inss_pensao_ind': inss_pensao_ind,
+                    'inss_aux_doenca': inss_aux_doenca, 'inss_aux_doenca_def': inss_aux_doenca_def, 'inss_aux_doenca_ind': inss_aux_doenca_ind,
+                    'inss_incapacidade_rural': inss_incapacidade_rural, 'inss_incapacidade_rural_def': inss_incapacidade_rural_def, 'inss_incapacidade_rural_ind': inss_incapacidade_rural_ind,
+                    'inss_sal_maternidade': inss_sal_maternidade, 'inss_sal_maternidade_def': inss_sal_maternidade_def, 'inss_sal_maternidade_ind': inss_sal_maternidade_ind,
+                    'inss_aux_acidente': inss_aux_acidente, 'inss_aux_acidente_def': inss_aux_acidente_def, 'inss_aux_acidente_ind': inss_aux_acidente_ind,
+                    'inss_bpc_idoso': inss_bpc_idoso, 'inss_bpc_idoso_def': inss_bpc_idoso_def, 'inss_bpc_idoso_ind': inss_bpc_idoso_ind,
+                    'inss_bpc_deficiente': inss_bpc_deficiente, 'inss_bpc_deficiente_def': inss_bpc_deficiente_def, 'inss_bpc_deficiente_ind': inss_bpc_deficiente_ind,
                     'adm_pericia_agendada': adm_pericia_agendada, 'adm_pericia_realizada': adm_pericia_realizada, 'adm_pericia_ausencia': adm_pericia_ausencia, 'adm_pericia_reagendada': adm_pericia_reagendada,
                     'adm_av_soc_agendada': adm_av_soc_agendada, 'adm_av_soc_realizada': adm_av_soc_realizada, 'adm_av_soc_ausencia': adm_av_soc_ausencia, 'adm_av_soc_reagendada': adm_av_soc_reagendada,
                     'adm_exig_cumprir': adm_exig_cumprir, 'adm_exig_cumpridas': adm_exig_cumpridas, 'adm_enviados_judicial': adm_enviados_judicial, 'adm_retrabalho': adm_retrabalho, 'adm_cancelados': adm_cancelados,
-                    'judicial_iniciais': judicial_iniciais, 'judicial_apos_idade': judicial_apos_idade, 'judicial_apos_idade_rural': judicial_apos_idade_rural, 'judicial_apos_tempo': judicial_apos_tempo, 'judicial_invalidez': judicial_invalidez, 'judicial_pensao': judicial_pensao, 
-                    'judicial_sal_maternidade': judicial_sal_maternidade, 'judicial_aux_acidente': judicial_aux_acidente, 'judicial_incapacidade_rural': judicial_incapacidade_rural, 'judicial_bpc_idoso': judicial_bpc_idoso, 'judicial_bpc_deficiente': judicial_bpc_deficiente,
+                    'judicial_iniciais': judicial_iniciais, 
+                    'judicial_apos_idade': judicial_apos_idade, 'judicial_apos_idade_def': judicial_apos_idade_def, 'judicial_apos_idade_ind': judicial_apos_idade_ind,
+                    'judicial_apos_idade_rural': judicial_apos_idade_rural, 'judicial_apos_idade_rural_def': judicial_apos_idade_rural_def, 'judicial_apos_idade_rural_ind': judicial_apos_idade_rural_ind,
+                    'judicial_apos_tempo': judicial_apos_tempo, 'judicial_apos_tempo_def': judicial_apos_tempo_def, 'judicial_apos_tempo_ind': judicial_apos_tempo_ind,
+                    'judicial_invalidez': judicial_invalidez, 'judicial_invalidez_def': judicial_invalidez_def, 'judicial_invalidez_ind': judicial_invalidez_ind,
+                    'judicial_pensao': judicial_pensao, 'judicial_pensao_def': judicial_pensao_def, 'judicial_pensao_ind': judicial_pensao_ind,
+                    'judicial_incapacidade_rural': judicial_incapacidade_rural, 'judicial_incapacidade_rural_def': judicial_incapacidade_rural_def, 'judicial_incapacidade_rural_ind': judicial_incapacidade_rural_ind,
+                    'judicial_bpc_idoso': judicial_bpc_idoso, 'judicial_bpc_idoso_def': judicial_bpc_idoso_def, 'judicial_bpc_idoso_ind': judicial_bpc_idoso_ind,
+                    'judicial_bpc_deficiente': judicial_bpc_deficiente, 'judicial_bpc_deficiente_def': judicial_bpc_deficiente_def, 'judicial_bpc_deficiente_ind': judicial_bpc_deficiente_ind,
                     'judicial_emendas': judicial_emendas, 'judicial_pericia_agendada': judicial_pericia_agendada, 'judicial_pericia_realizada': judicial_pericia_realizada, 'judicial_pericia_ausencia': judicial_pericia_ausencia,
                     'judicial_recursos': judicial_recursos, 'judicial_rec_providos': judicial_rec_providos, 'judicial_rec_improvidos': judicial_rec_improvidos,
                     'sentecas_proc': sentecas_proc, 'sentecas_improc': sentecas_improc, 'judicial_extinto': judicial_extinto, 'judicial_estoque': judicial_estoque, 'judicial_retrabalho': judicial_retrabalho, 'judicial_cancelados': judicial_cancelados,
@@ -547,17 +651,25 @@ else:
                 st.success(f"Dados da **{semana_atual}** salvos com sucesso.")
                 st.rerun()
 
-    # --- CONSOLIDAÇÃO ---
+    # --- CONSOLIDAÇÃO MENSAL COMPLETA ---
     totais_mes = {}
     chaves_numericas = [
         'leads', 'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada', 'comercial_cancelados',
-        'inss_geral', 'inss_apos_idade', 'inss_apos_idade_rural', 'inss_apos_tempo', 'inss_invalidez', 'inss_pensao', 'inss_aux_doenca', 
-        'inss_incapacidade_rural', 'inss_sal_maternidade', 'inss_aux_acidente', 'inss_bpc_idoso', 'inss_bpc_deficiente',
+        'inss_geral', 'inss_apos_idade', 'inss_apos_idade_def', 'inss_apos_idade_ind', 'inss_apos_idade_rural', 'inss_apos_idade_rural_def', 'inss_apos_idade_rural_ind',
+        'inss_apos_tempo', 'inss_apos_tempo_def', 'inss_apos_tempo_ind', 'inss_invalidez', 'inss_invalidez_def', 'inss_invalidez_ind',
+        'inss_pensao', 'inss_pensao_def', 'inss_pensao_ind', 'inss_aux_doenca', 'inss_aux_doenca_def', 'inss_aux_doenca_ind', 
+        'inss_incapacidade_rural', 'inss_incapacidade_rural_def', 'inss_incapacidade_rural_ind', 'inss_sal_maternidade', 'inss_sal_maternidade_def', 'inss_sal_maternidade_ind',
+        'inss_aux_acidente', 'inss_aux_acidente_def', 'inss_aux_acidente_ind', 'inss_bpc_idoso', 'inss_bpc_idoso_def', 'inss_bpc_idoso_ind',
+        'inss_bpc_deficiente', 'inss_bpc_deficiente_def', 'inss_bpc_deficiente_ind',
         'adm_pericia_agendada', 'adm_pericia_realizada', 'adm_pericia_ausencia', 'adm_pericia_reagendada',
         'adm_av_soc_agendada', 'adm_av_soc_realizada', 'adm_av_soc_ausencia', 'adm_av_soc_reagendada',
         'adm_exig_cumprir', 'adm_exig_cumpridas', 'adm_enviados_judicial', 'adm_retrabalho', 'adm_cancelados',
-        'judicial_iniciais', 'judicial_apos_idade', 'judicial_apos_idade_rural', 'judicial_apos_tempo', 'judicial_invalidez', 'judicial_pensao', 
-        'judicial_sal_maternidade', 'judicial_aux_acidente', 'judicial_incapacidade_rural', 'judicial_bpc_idoso', 'judicial_bpc_deficiente',
+        'judicial_iniciais', 'judicial_apos_idade', 'judicial_apos_idade_def', 'judicial_apos_idade_ind',
+        'judicial_apos_idade_rural', 'judicial_apos_idade_rural_def', 'judicial_apos_idade_rural_ind',
+        'judicial_apos_tempo', 'judicial_apos_tempo_def', 'judicial_apos_tempo_ind', 'judicial_invalidez', 'judicial_invalidez_def', 'judicial_invalidez_ind',
+        'judicial_pensao', 'judicial_pensao_def', 'judicial_pensao_ind', 'judicial_sal_maternidade', 'judicial_sal_maternidade_def', 'judicial_sal_maternidade_ind',
+        'judicial_aux_acidente', 'judicial_incapacidade_rural', 'judicial_incapacidade_rural_def', 'judicial_incapacidade_rural_ind',
+        'judicial_bpc_idoso', 'judicial_bpc_idoso_def', 'judicial_bpc_idoso_ind', 'judicial_bpc_deficiente', 'judicial_bpc_deficiente_def', 'judicial_bpc_deficiente_ind',
         'judicial_emendas', 'judicial_pericia_agendada', 'judicial_pericia_realizada', 'judicial_pericia_ausencia',
         'judicial_recursos', 'judicial_rec_providos', 'judicial_rec_improvidos',
         'sentecas_proc', 'sentecas_improc', 'judicial_extinto', 'judicial_estoque', 'judicial_retrabalho', 'judicial_cancelados',
@@ -611,15 +723,15 @@ else:
         f1.metric("Total Leads", totais_mes['leads'])
         f2.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
         f3.metric("Receita Contratada", f"R$ {totais_mes['receita_contratada']:,.2f}")
-        f4.metric("Contratos Fechados", totais_mes['contratos'])
+        f4.metric("Cancelados / Desistências", totais_mes['comercial_cancelados'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Produção Operacional (Adm & Judicial)")
+        st.markdown("#### Produção Operacional Consolidada (Adm & Judicial)")
         op1, op2, op3, op4 = st.columns(4, gap="medium")
         op1.metric("Protocolos INSS", totais_mes['inss_geral'])
         op2.metric("Protocolos Judiciais", totais_mes['judicial_iniciais'])
-        op3.metric("BPC Total (Adm+Judicial)", totais_mes['inss_bpc_idoso'] + totais_mes['inss_bpc_deficiente'] + totais_mes['judicial_bpc_idoso'] + totais_mes['judicial_bpc_deficiente'])
-        op4.metric("Perícias Realizadas", totais_mes['adm_pericia_realizada'] + totais_mes['judicial_pericia_realizada'])
+        op3.metric("Sentenças Procedentes", totais_mes['sentecas_proc'])
+        op4.metric("Recursos Providos", totais_mes['judicial_rec_providos'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
         st.markdown("#### Sucesso do Cliente & Qualidade")
