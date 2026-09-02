@@ -1,0 +1,5 @@
+{
+    "admin": {"senha": "muller2026", "nome": "Muller Oliveira", "tipo": "admin"},
+    "escritorio_a": {"senha": "123", "nome": "T.A. Advocacia", "tipo": "cliente"},
+    "nayeralira": {"senha": "nayara26", "nome": "NAYARA LIRA ADVOCACIA PREVIDENCIÁRIA", "tipo": "cliente"}
+}
