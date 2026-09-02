@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import json
+import os
 from datetime import datetime
 
 st.set_page_config(
@@ -8,6 +10,44 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# --- PERSISTÊNCIA DE USUÁRIOS EM JSON (AUTONOMIA TOTAL) ---
+USER_FILE = "usuarios.json"
+
+def carregar_usuarios():
+    if os.path.exists(USER_FILE):
+        try:
+            with open(USER_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            pass
+    return {
+        "admin": {"senha": "muller2026", "nome": "Muller Oliveira", "tipo": "admin"},
+        "escritorio_a": {"senha": "123", "nome": "T.A. Advocacia", "tipo": "cliente"},
+        "nayeralira": {"senha": "nayara26", "nome": "NAYARA LIRA ADVOCACIA PREVIDENCIÁRIA", "tipo": "cliente"}
+    }
+
+def salvar_usuarios(usuarios):
+    try:
+        with open(USER_FILE, "w", encoding="utf-8") as f:
+            json.dump(usuarios, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        st.error(f"Erro ao salvar arquivo de usuários: {e}")
+
+if 'usuarios' not in st.session_state:
+    st.session_state['usuarios'] = carregar_usuarios()
+
+if 'base_dados_geral' not in st.session_state:
+    st.session_state['base_dados_geral'] = {
+        "T.A. Advocacia": {},
+        "NAYARA LIRA ADVOCACIA PREVIDENCIÁRIA": {}
+    }
+
+if 'usuario_logado' not in st.session_state:
+    st.session_state['usuario_logado'] = None
+
+if 'modo_gerenciar' not in st.session_state:
+    st.session_state['modo_gerenciar'] = False
 
 # --- DESIGN SYSTEM: SOFTWARE EXECUTIVO PREMIUM (TEMA CLARO & CHAMPAGNE) ---
 st.markdown("""
@@ -174,24 +214,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- INICIALIZAÇÃO DE DADOS PERSISTENTES NO SESSION STATE ---
-if 'usuarios' not in st.session_state:
-    st.session_state['usuarios'] = {
-        "admin": {"senha": "muller2026", "nome": "Muller Oliveira", "tipo": "admin"},
-        "escritorio_a": {"senha": "123", "nome": "T.A. Advocacia", "tipo": "cliente"}
-    }
-
-if 'base_dados_geral' not in st.session_state:
-    st.session_state['base_dados_geral'] = {
-        "T.A. Advocacia": {}
-    }
-
-if 'usuario_logado' not in st.session_state:
-    st.session_state['usuario_logado'] = None
-
-if 'modo_gerenciar' not in st.session_state:
-    st.session_state['modo_gerenciar'] = False
-
 # --- TELA DE AUTENTICAÇÃO EXECUTIVA ---
 if st.session_state['usuario_logado'] is None:
     st.markdown("""
@@ -213,11 +235,12 @@ if st.session_state['usuario_logado'] is None:
                 entrar = st.form_submit_button("Acessar plataforma", type="primary", use_container_width=True)
                 
                 if entrar:
-                    # Limpa espaços em branco acidentais no login
-                    u_clean = usuario_input.strip()
+                    u_clean = usuario_input.strip().lower()
                     s_clean = senha_input.strip()
-                    if u_clean in st.session_state['usuarios'] and st.session_state['usuarios'][u_clean]['senha'] == s_clean:
+                    usuarios_dict = carregar_usuarios()
+                    if u_clean in usuarios_dict and usuarios_dict[u_clean]['senha'] == s_clean:
                         st.session_state['usuario_logado'] = u_clean
+                        st.session_state['usuarios'] = usuarios_dict
                         st.rerun()
                     else:
                         st.error("Credenciais inválidas. Verifique usuário e senha.")
@@ -226,7 +249,8 @@ if st.session_state['usuario_logado'] is None:
             st.markdown("<p style='font-size: 13px; color: #6E7684; margin-top: 10px;'>Solicite o reestabelecimento ao administrador.</p>", unsafe_allow_html=True)
             user_rec = st.text_input("Usuário cadastrado", key="rec_user")
             if st.button("Enviar solicitação", type="secondary", use_container_width=True):
-                if user_rec in st.session_state['usuarios']:
+                usuarios_dict = carregar_usuarios()
+                if user_rec.strip().lower() in usuarios_dict:
                     st.success("Solicitação enviada com sucesso.")
                 else:
                     st.warning("Usuário não localizado.")
@@ -234,6 +258,7 @@ if st.session_state['usuario_logado'] is None:
 
 # --- SESSÃO ATIVA & SIDEBAR ORGANIZADA ---
 user_atual = st.session_state['usuario_logado']
+st.session_state['usuarios'] = carregar_usuarios()
 dados_user = st.session_state['usuarios'][user_atual]
 is_admin = dados_user['tipo'] == 'admin'
 
@@ -317,28 +342,35 @@ if is_admin and st.session_state.get('modo_gerenciar', False):
             salvar_escritorio = st.form_submit_button("Criar acesso", type="primary", use_container_width=True)
             
             if salvar_escritorio:
-                u_id_clean = novo_id.strip()
-                n_nome_clean = novo_nome.strip()
+                u_id_clean = novo_id.strip().lower()
+                n_nome_clean = novo_nome.strip().upper()
                 n_senha_clean = nova_senha.strip()
                 if u_id_clean and n_nome_clean and n_senha_clean:
-                    st.session_state['usuarios'][u_id_clean] = {"senha": n_senha_clean, "nome": n_nome_clean, "tipo": "cliente"}
+                    usuarios_atuais = carregar_usuarios()
+                    usuarios_atuais[u_id_clean] = {"senha": n_senha_clean, "nome": n_nome_clean, "tipo": "cliente"}
+                    salvar_usuarios(usuarios_atuais)
+                    st.session_state['usuarios'] = usuarios_atuais
+                    
                     if n_nome_clean not in st.session_state['base_dados_geral']:
                         st.session_state['base_dados_geral'][n_nome_clean] = {}
-                    st.success(f"Escritório '{n_nome_clean}' (Usuário: {u_id_clean}) criado com sucesso!")
+                    st.success(f"Escritório '{n_nome_clean}' (Usuário: {u_id_clean}) salvo permanentemente com sucesso!")
                 else:
                     st.error("Preencha todos os campos corretamente.")
 
     with col_g2:
         with st.form("del_escritorio_main"):
             st.markdown("#### Remover Escritório")
-            lista_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
+            usuarios_atuais = carregar_usuarios()
+            lista_clientes = [u['nome'] for u in usuarios_atuais.values() if u['tipo'] == 'cliente']
             if lista_clientes:
                 escritorio_para_excluir = st.selectbox("Selecionar escritório para remoção", lista_clientes)
                 excluir_btn = st.form_submit_button("Excluir escritório", use_container_width=True)
                 if excluir_btn:
-                    chave_del = [k for k, v in st.session_state['usuarios'].items() if v['nome'] == escritorio_para_excluir]
+                    chave_del = [k for k, v in usuarios_atuais.items() if v['nome'] == escritorio_para_excluir]
                     if chave_del:
-                        del st.session_state['usuarios'][chave_del[0]]
+                        del usuarios_atuais[chave_del[0]]
+                        salvar_usuarios(usuarios_atuais)
+                        st.session_state['usuarios'] = usuarios_atuais
                     if escritorio_para_excluir in st.session_state['base_dados_geral']:
                         del st.session_state['base_dados_geral'][escritorio_para_excluir]
                     st.success(f"Escritório '{escritorio_para_excluir}' removido.")
