@@ -420,7 +420,6 @@ else:
                 st.success(f"Dados da {semana_atual} limpos.")
                 st.rerun()
 
-        # --- ABAS DE SETORES NO LANÇAMENTO SEMANAL ---
         sub_tab_com, sub_tab_adm, sub_tab_jud, sub_tab_fin, sub_tab_cs, sub_tab_eq = st.tabs([
             "1. Comercial", 
             "2. Administrativo", 
@@ -651,7 +650,7 @@ else:
                 st.success(f"Dados da **{semana_atual}** salvos com sucesso.")
                 st.rerun()
 
-    # --- CONSOLIDAÇÃO MENSAL COMPLETA ---
+    # --- CONSOLIDAÇÃO MENSAL COMPLETA E DETALHADA ---
     totais_mes = {}
     chaves_numericas = [
         'leads', 'leads_fisico', 'leads_digital', 'qualificados', 'contratos', 'receita_contratada', 'comercial_cancelados',
@@ -705,7 +704,7 @@ else:
     with tab2:
         st.markdown(f"""
             <div style="margin-bottom: 28px;">
-                <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Consolidado mensal</h2>
+                <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Consolidado mensal geral</h2>
                 <div style="font-size: 14px; font-weight: 400; color: #6E7684;"><span style="color: #202632; font-weight: 500;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido}</div>
             </div>
         """, unsafe_allow_html=True)
@@ -718,7 +717,7 @@ else:
         c4.metric("Recebido Efetivo", f"R$ {totais_mes['recebido']:,.2f}")
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Comercial & Leads")
+        st.markdown("#### 1. Comercial & Vendas")
         f1, f2, f3, f4 = st.columns(4, gap="medium")
         f1.metric("Total Leads", totais_mes['leads'])
         f2.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
@@ -726,15 +725,23 @@ else:
         f4.metric("Cancelados / Desistências", totais_mes['comercial_cancelados'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Produção Operacional Consolidada (Adm & Judicial)")
-        op1, op2, op3, op4 = st.columns(4, gap="medium")
-        op1.metric("Protocolos INSS", totais_mes['inss_geral'])
-        op2.metric("Protocolos Judiciais", totais_mes['judicial_iniciais'])
-        op3.metric("Sentenças Procedentes", totais_mes['sentecas_proc'])
-        op4.metric("Recursos Providos", totais_mes['judicial_rec_providos'])
+        st.markdown("#### 2. Produção Operacional Administrativa (INSS) - Acumulado do Mês")
+        op_a1, op_a2, op_a3, op_a4 = st.columns(4, gap="medium")
+        op_a1.metric("Protocolos INSS Totais", totais_mes['inss_geral'])
+        op_a2.metric("Perícias Realizadas (Adm)", totais_mes['adm_pericia_realizada'])
+        op_a3.metric("Exigências Cumpridas", totais_mes['adm_exig_cumpridas'])
+        op_a4.metric("Enviados ao Judicial", totais_mes['adm_enviados_judicial'])
 
         st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Sucesso do Cliente & Qualidade")
+        st.markdown("#### 3. Produção Operacional Judicial - Acumulado do Mês")
+        op_j1, op_j2, op_j3, op_j4 = st.columns(4, gap="medium")
+        op_j1.metric("Protocolos Judiciais Totais", totais_mes['judicial_iniciais'])
+        op_j2.metric("Sentenças Procedentes", totais_mes['sentecas_proc'])
+        op_j3.metric("Sentenças Improcedentes", totais_mes['sentecas_improc'])
+        op_j4.metric("Recursos Providos", totais_mes['judicial_rec_providos'])
+
+        st.markdown("<div style='margin: 28px 0;'></div>", unsafe_allow_html=True)
+        st.markdown("#### 4. Sucesso do Cliente & Qualidade")
         sc1, sc2, sc3, sc4 = st.columns(4, gap="medium")
         sc1.metric("NPS Médio", f"{totais_mes['nps']:.1f}")
         sc2.metric("Aniversariantes Contatados", totais_mes['contatos_aniversariantes'])
@@ -742,7 +749,7 @@ else:
         sc4.metric("Processos Arquivados", totais_mes['processos_arquivados'])
 
         st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
-        st.markdown("#### Histórico detalhado por semana")
+        st.markdown("#### Histórico detalhado por semana (Matriz Completa)")
         df_semanas = pd.DataFrame(historico_mes).T
         st.dataframe(df_semanas, use_container_width=True)
 
