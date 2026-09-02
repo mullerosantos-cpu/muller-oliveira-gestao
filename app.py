@@ -9,75 +9,89 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- DESIGN SYSTEM EXECUTIVO: BLINDAGEM DE CSS & TOKENS OFICIAIS ---
+# --- DESIGN SYSTEM: SOFTWARE EXECUTIVO PREMIUM (TEMA CLARO & CHAMPAGNE) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
     :root {
-        --bg: #080E18;
-        --sidebar: #0D1726;
-        --surface: #111C2E;
-        --surface-2: #152238;
-        --border: #26354D;
-        --text: #F2F4F7;
-        --text-2: #98A4B5;
-        --text-3: #6F7B8D;
-        --gold: #D8B43C;
-        --gold-hover: #E3C355;
-        --danger: #C96C6C;
-        --success: #3F9C6B;
+        --bg: #F6F7F9;
+        --sidebar: #1D2633;
+        --sidebar-hover: #253142;
+
+        --surface: #FFFFFF;
+        --surface-soft: #F1F3F5;
+
+        --border: #E2E5E9;
+        --border-dark: #344154;
+
+        --text: #202632;
+        --text-secondary: #6E7684;
+        --text-muted: #8A919D;
+
+        --text-dark-bg: #F4F5F7;
+        --text-dark-bg-secondary: #AEB6C2;
+
+        --accent: #B89A6A;
+        --accent-hover: #A8895D;
+
+        --success: #59806A;
+        --danger: #A45F5F;
+        --warning: #B38B56;
+
         --radius-input: 9px;
         --radius-button: 9px;
-        --radius-card: 14px;
+        --radius-card: 12px;
     }
 
-    /* Fundo Geral */
+    /* Fundo Geral da Aplicação */
     .stApp {
         background-color: var(--bg) !important;
         color: var(--text) !important;
         font-family: 'Inter', sans-serif !important;
     }
 
-    /* Sidebar Limpa e Alinhada */
+    /* Sidebar Executiva Escura */
     section[data-testid="stSidebar"] {
         background-color: var(--sidebar) !important;
-        border-right: 1px solid var(--border) !important;
+        border-right: 1px solid var(--border-dark) !important;
         padding-top: 1rem !important;
     }
     section[data-testid="stSidebar"] * {
         font-family: 'Inter', sans-serif !important;
-        color: var(--text) !important;
+        color: var(--text-dark-bg) !important;
+    }
+    section[data-testid="stSidebar"] hr {
+        border-color: var(--border-dark) !important;
     }
 
-    /* Tipografia de Títulos */
+    /* Tipografia Global unificada em Inter */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif !important;
         color: var(--text) !important;
         font-weight: 600 !important;
-        letter-spacing: -0.01em;
-    }
-    .brand-serif {
-        font-family: 'Cormorant Garamond', serif !important;
+        letter-spacing: -0.02em;
     }
 
-    /* Inputs Padrão */
+    /* Inputs e Controles */
     div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
-        background-color: #F3F4F6 !important;
+        background-color: var(--surface) !important;
         border-radius: var(--radius-input) !important;
-        border: 1px solid transparent !important;
+        border: 1px solid var(--border) !important;
         min-height: 42px !important;
     }
     div[data-baseweb="input"] input, div[data-baseweb="select"] span {
-        color: #202738 !important;
+        color: var(--text) !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 14px !important;
     }
     .stNumberInput input, .stTextInput input {
-        background-color: #F3F4F6 !important;
-        color: #202738 !important;
+        background-color: var(--surface) !important;
+        color: var(--text) !important;
         border-radius: var(--radius-input) !important;
+        border: 1px solid var(--border) !important;
         font-size: 14px !important;
+        height: 42px !important;
     }
 
     /* Formulários e Superfícies */
@@ -86,83 +100,85 @@ st.markdown("""
         padding: 24px !important;
         border-radius: var(--radius-card) !important;
         border: 1px solid var(--border) !important;
+        box-shadow: 0 1px 3px rgba(31, 38, 50, 0.04);
     }
 
-    /* Métricas Compactas */
+    /* Cards de Métricas Compactos (Alta Densidade) */
     [data-testid="stMetric"] {
         background-color: var(--surface) !important;
-        padding: 16px 20px !important;
+        padding: 18px 20px !important;
         border-radius: var(--radius-card) !important;
         border: 1px solid var(--border) !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        box-shadow: 0 1px 3px rgba(31, 38, 50, 0.04);
     }
     [data-testid="stMetricLabel"] {
-        color: var(--text-2) !important;
-        font-size: 12px !important;
+        color: var(--text-secondary) !important;
+        font-size: 11px !important;
         font-weight: 500 !important;
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
     [data-testid="stMetricValue"] {
         color: var(--text) !important;
-        font-size: 28px !important;
-        font-weight: 700 !important;
+        font-size: 34px !important;
+        font-weight: 650 !important;
+        letter-spacing: -0.03em;
+        line-height: 1.1 !important;
     }
 
-    /* Botões Primários Dourados */
+    /* Botões Primários (Champagne) */
     .stButton > button[kind="primary"], div.stButton > button:first-child {
-        background-color: var(--gold) !important;
-        color: #080E18 !important;
-        border: 1px solid var(--gold) !important;
+        background-color: var(--accent) !important;
+        color: #FFFFFF !important;
+        border: none !important;
         border-radius: var(--radius-button) !important;
         font-weight: 600 !important;
         height: 42px !important;
         transition: all 0.2s ease !important;
     }
     .stButton > button[kind="primary"]:hover, div.stButton > button:first-child:hover {
-        background-color: var(--gold-hover) !important;
-        border-color: var(--gold-hover) !important;
-        color: #080E18 !important;
-        box-shadow: 0 0 12px rgba(216, 180, 60, 0.25);
+        background-color: var(--accent-hover) !important;
+        color: #FFFFFF !important;
     }
 
     /* Botões Secundários */
     .stButton > button[kind="secondary"] {
-        background-color: var(--surface-2) !important;
-        color: var(--text) !important;
+        background-color: var(--surface) !important;
         border: 1px solid var(--border) !important;
+        color: #3C4450 !important;
         border-radius: var(--radius-button) !important;
         height: 40px !important;
         font-weight: 500 !important;
+        transition: all 0.2s ease !important;
     }
     .stButton > button[kind="secondary"]:hover {
-        background-color: #1A2B45 !important;
-        border-color: #3A4C68 !important;
+        background-color: var(--surface-soft) !important;
+        border-color: #C5CACF !important;
         color: var(--text) !important;
     }
 
-    /* Navegação por Abas Limpa */
+    /* Navegação por Abas Minimalista */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 12px;
+        gap: 16px;
         background-color: transparent !important;
         border-bottom: 1px solid var(--border) !important;
-        margin-bottom: 24px;
+        margin-bottom: 28px;
     }
     .stTabs [data-baseweb="tab"] {
         background-color: transparent !important;
-        color: var(--text-3) !important;
+        color: var(--text-muted) !important;
         border: none !important;
         border-bottom: 2px solid transparent !important;
-        padding: 10px 16px !important;
+        padding: 8px 4px 12px 4px !important;
         font-weight: 500 !important;
         font-size: 14px !important;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        color: #D4D9E1 !important;
+        color: var(--text) !important;
     }
     .stTabs [aria-selected="true"] {
         color: var(--text) !important;
-        border-bottom: 2px solid var(--gold) !important;
+        border-bottom: 2px solid var(--accent) !important;
         font-weight: 600 !important;
     }
     </style>
@@ -183,12 +199,12 @@ if 'base_dados_geral' not in st.session_state:
 if 'usuario_logado' not in st.session_state:
     st.session_state['usuario_logado'] = None
 
-# --- TELA DE AUTENTICAÇÃO EXECUTIVA ---
+# --- TELA DE AUTENTICAÇÃO EXECUTIVA (TEMA CLARO) ---
 if st.session_state['usuario_logado'] is None:
     st.markdown("""
-        <div style="max-width: 400px; margin: 100px auto; background-color: #111C2E; padding: 36px; border-radius: 16px; border: 1px solid #26354D; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center;">
-            <h2 class="brand-serif" style="color: #F2F4F7; margin-bottom: 2px; font-size: 32px; font-weight: 600;">Muller Oliveira</h2>
-            <p style="color: #D8B43C; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 28px; font-weight: 600;">Controladoria & Gestão Executiva</p>
+        <div style="max-width: 400px; margin: 100px auto; background-color: #FFFFFF; padding: 40px; border-radius: 14px; border: 1px solid #E2E5E9; box-shadow: 0 4px 20px rgba(31, 38, 50, 0.06); text-align: center;">
+            <h2 style="color: #202632; margin-bottom: 4px; font-size: 28px; font-weight: 650; letter-spacing: -0.02em;">Muller Oliveira</h2>
+            <p style="color: #6E7684; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 32px; font-weight: 600;">Controladoria & Gestão Executiva</p>
         </div>
     """, unsafe_allow_html=True)
     
@@ -198,7 +214,7 @@ if st.session_state['usuario_logado'] is None:
         
         with aba_login:
             with st.form("form_login"):
-                st.markdown("<p style='font-size: 13px; color: #98A4B5; margin-bottom: 12px;'>Informe suas credenciais corporativas.</p>", unsafe_allow_html=True)
+                st.markdown("<p style='font-size: 13px; color: #6E7684; margin-bottom: 12px;'>Entre com suas credenciais corporativas.</p>", unsafe_allow_html=True)
                 usuario_input = st.text_input("Usuário de acesso")
                 senha_input = st.text_input("Senha", type="password")
                 entrar = st.form_submit_button("Acessar plataforma", type="primary", use_container_width=True)
@@ -211,7 +227,7 @@ if st.session_state['usuario_logado'] is None:
                         st.error("Credenciais inválidas.")
                         
         with aba_rec:
-            st.markdown("<p style='font-size: 13px; color: #98A4B5; margin-top: 10px;'>Solicite o reestabelecimento ao administrador.</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px; color: #6E7684; margin-top: 10px;'>Solicite o reestabelecimento ao administrador.</p>", unsafe_allow_html=True)
             user_rec = st.text_input("Usuário cadastrado", key="rec_user")
             if st.button("Enviar solicitação", type="secondary", use_container_width=True):
                 if user_rec in st.session_state['usuarios']:
@@ -220,18 +236,18 @@ if st.session_state['usuario_logado'] is None:
                     st.warning("Usuário não localizado.")
     st.stop()
 
-# --- SESSÃO ATIVA & SIDEBAR REESTRUTURADA ---
+# --- SESSÃO ATIVA & SIDEBAR ORGANIZADA ---
 user_atual = st.session_state['usuario_logado']
 dados_user = st.session_state['usuarios'][user_atual]
 is_admin = dados_user['tipo'] == 'admin'
 
 tipo_usuario_str = 'Administrador' if is_admin else 'Cliente Corporativo'
 
-st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 4px;'>Sessão ativa</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; color: #8F98A6; margin-bottom: 6px;'>Sessão</div>", unsafe_allow_html=True)
 st.sidebar.markdown(f"""
-    <div style="background-color: #152238; border: 1px solid #26354D; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;">
-        <div style="font-size: 13px; font-weight: 500; color: #F2F4F7;">{dados_user['nome']}</div>
-        <div style="font-size: 11px; color: #98A4B5; margin-top: 2px;">{tipo_usuario_str}</div>
+    <div style="margin-bottom: 12px;">
+        <div style="font-size: 14px; font-weight: 600; color: #F4F5F7;">{dados_user['nome']}</div>
+        <div style="font-size: 12px; color: #AEB6C2; margin-top: 2px;">{tipo_usuario_str}</div>
     </div>
 """, unsafe_allow_html=True)
 
@@ -242,7 +258,7 @@ if st.sidebar.button("Encerrar sessão", type="secondary", use_container_width=T
 st.sidebar.markdown("---")
 
 if is_admin:
-    st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 8px;'>Painel do Consultor</div>", unsafe_allow_html=True)
+    st.sidebar.markdown("<div style='font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; color: #8F98A6; margin-bottom: 8px;'>Painel</div>", unsafe_allow_html=True)
     
     with st.sidebar.expander("Gerenciar escritórios", expanded=False):
         with st.form("cad_escritorio"):
@@ -280,7 +296,7 @@ if is_admin:
     st.sidebar.markdown("---")
     lista_nomes_clientes = [u['nome'] for u in st.session_state['usuarios'].values() if u['tipo'] == 'cliente']
     if lista_nomes_clientes:
-        st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 4px;'>Escritório Ativo</div>", unsafe_allow_html=True)
+        st.sidebar.markdown("<div style='font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; color: #8F98A6; margin-bottom: 6px;'>Escritório ativo</div>", unsafe_allow_html=True)
         escritorio_selecionado = st.sidebar.selectbox("Selecionar escritório ativo", lista_nomes_clientes, label_visibility="collapsed")
     else:
         escritorio_selecionado = "Nenhum"
@@ -289,7 +305,7 @@ else:
     if escritorio_selecionado not in st.session_state['base_dados_geral']:
         st.session_state['base_dados_geral'][escritorio_selecionado] = {}
 
-st.sidebar.markdown("<div style='font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6F7B8D; margin-bottom: 8px;'>Período de Competência</div>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; color: #8F98A6; margin-bottom: 8px;'>Período</div>", unsafe_allow_html=True)
 meses_do_ano = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
 mes_escolhido = st.sidebar.selectbox("Mês", meses_do_ano, index=7)
 ano_escolhido = st.sidebar.number_input("Ano", min_value=2024, max_value=2035, value=2026)
@@ -297,19 +313,24 @@ mes_ano_str = f"{mes_escolhido}/{ano_escolhido}"
 
 semana_atual = st.sidebar.selectbox("Semana de Referência", ["Semana 1", "Semana 2", "Semana 3", "Semana 4"])
 
-# --- CABEÇALHO EXECUTIVO MINIMALISTA ---
-st.markdown(f"""
-    <div style="background-color: #0D1726; padding: 26px 36px; border-radius: 14px; border: 1px solid #26354D; border-bottom: 3px solid #D8B43C; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
+# --- CABEÇALHO PRINCIPAL INTEGRADO (TEMA CLARO) ---
+col_h1, col_h2 = st.columns([3, 1])
+with col_h1:
+    st.markdown(f"""
         <div>
-            <h1 class="brand-serif" style="margin: 0; font-size: 36px; font-weight: 600; line-height: 1; color: #F2F4F7 !important;">Muller Oliveira</h1>
-            <p style="margin: 12px 0 0 0; font-size: 11px; letter-spacing: 0.28em; color: #A9B1BF !important; text-transform: uppercase; font-weight: 600;">Controladoria & Gestão Executiva</p>
+            <div style="font-size: 30px; font-weight: 600; color: #202632; letter-spacing: -0.03em; line-height: 1.1;">Muller Oliveira</div>
+            <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #7D8490; margin-top: 6px;">Controladoria & Gestão Executiva</div>
         </div>
-        <div style="background-color: #111C2E; border: 1px solid #26354D; padding: 12px 16px; border-radius: 10px;">
-            <div style="font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #8E99A9; margin-bottom: 2px;">Cliente Ativo</div>
-            <div style="font-size: 14px; font-weight: 600; color: #F2F4F7;">{escritorio_selecionado}</div>
+    """, unsafe_allow_html=True)
+with col_h2:
+    st.markdown(f"""
+        <div style="background: #FFFFFF; border: 1px solid #E2E5E9; border-radius: 10px; padding: 10px 14px; text-align: right;">
+            <div style="font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #8C939F; margin-bottom: 2px;">Cliente Ativo</div>
+            <div style="font-size: 14px; font-weight: 600; color: #202632;">{escritorio_selecionado}</div>
         </div>
-    </div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
 
 if escritorio_selecionado == "Nenhum":
     st.warning("Nenhum escritório cliente cadastrado. Utilize o painel lateral do consultor para cadastrar o primeiro cliente.")
@@ -338,13 +359,13 @@ else:
         with col_t1:
             st.markdown(f"""
                 <div style="margin-bottom: 28px;">
-                    <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Lançamento semanal</h2>
-                    <div style="font-size: 15px; font-weight: 500; color: #98A4B5;"><span style="color: #F2F4F7;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido} · {semana_atual}</div>
+                    <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Lançamento semanal</h2>
+                    <div style="font-size: 14px; font-weight: 400; color: #6E7684;"><span style="color: #202632; font-weight: 500;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido} · {semana_atual}</div>
                 </div>
             """, unsafe_allow_html=True)
         with col_t2:
             st.markdown("<div style='padding-top: 4px;'></div>", unsafe_allow_html=True)
-            if st.button("Limpar dados da semana", type="secondary"):
+            if st.button("Limpar semana", type="secondary"):
                 st.session_state['base_dados_geral'][escritorio_selecionado][mes_ano_str][semana_atual] = {}
                 st.success(f"Dados da {semana_atual} limpos.")
                 st.rerun()
@@ -451,8 +472,8 @@ else:
     with tab2:
         st.markdown(f"""
             <div style="margin-bottom: 28px;">
-                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Consolidado mensal</h2>
-                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;"><span style="color: #F2F4F7;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido}</div>
+                <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Consolidado mensal</h2>
+                <div style="font-size: 14px; font-weight: 400; color: #6E7684;"><span style="color: #202632; font-weight: 500;">{escritorio_selecionado}</span> · {mes_escolhido} de {ano_escolhido}</div>
             </div>
         """, unsafe_allow_html=True)
         
@@ -495,8 +516,8 @@ else:
     with tab3:
         st.markdown(f"""
             <div style="margin-bottom: 28px;">
-                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Previsibilidade</h2>
-                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;">Vendido x Entregue · <span style="color: #F2F4F7;">{escritorio_selecionado}</span></div>
+                <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Previsibilidade</h2>
+                <div style="font-size: 14px; font-weight: 400; color: #6E7684;">Vendido x Entregue · <span style="color: #202632; font-weight: 500;">{escritorio_selecionado}</span></div>
             </div>
         """, unsafe_allow_html=True)
         
@@ -510,8 +531,8 @@ else:
     with tab4:
         st.markdown(f"""
             <div style="margin-bottom: 28px;">
-                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Diagnóstico</h2>
-                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;">Análise de estoques · <span style="color: #F2F4F7;">{escritorio_selecionado}</span></div>
+                <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Diagnóstico</h2>
+                <div style="font-size: 14px; font-weight: 400; color: #6E7684;">Análise de estoques · <span style="color: #202632; font-weight: 500;">{escritorio_selecionado}</span></div>
             </div>
         """, unsafe_allow_html=True)
         
@@ -524,8 +545,8 @@ else:
     with tab5:
         st.markdown(f"""
             <div style="margin-bottom: 28px;">
-                <h2 style="font-size: 32px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 8px 0;">Plano de ação</h2>
-                <div style="font-size: 15px; font-weight: 500; color: #98A4B5;">Diretrizes estratégicas · <span style="color: #F2F4F7;">{escritorio_selecionado}</span></div>
+                <h2 style="font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 6px 0;">Plano de ação</h2>
+                <div style="font-size: 14px; font-weight: 400; color: #6E7684;">Diretrizes estratégicas · <span style="color: #202632; font-weight: 500;">{escritorio_selecionado}</span></div>
             </div>
         """, unsafe_allow_html=True)
         
