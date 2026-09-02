@@ -594,6 +594,10 @@ else:
                 nps = st.number_input("NPS (Net Promoter Score)", value=float(dados_semana_salvos.get('nps', 0.0)))
                 contatos_aniversariantes = st.number_input("Contatos com aniversariantes do dia", value=int(dados_semana_salvos.get('contatos_aniversariantes', 0)))
                 processos_arquivados = st.number_input("Processos arquivados", value=int(dados_semana_salvos.get('processos_arquivados', 0)))
+                
+                # NOVO CAMPO: Solicitações de Indicação de Clientes
+                indicacoes_solicitadas = st.number_input("Indicações de Clientes solicitadas", value=int(dados_semana_salvos.get('indicacoes_solicitadas', 0)))
+                
                 clientes_aguard_judicial = st.number_input("Clientes aguardando envio Judicial", value=int(dados_semana_salvos.get('clientes_aguard_judicial', 0)))
                 clientes_aguard_adm = st.number_input("Clientes aguardando envio Administrativo", value=int(dados_semana_salvos.get('clientes_aguard_adm', 0)))
                 avaliacoes_google = st.number_input("Novas avaliações no Google", value=int(dados_semana_salvos.get('avaliacoes_google', 0)))
@@ -643,6 +647,7 @@ else:
                     'prazos_fatal': prazos_fatal, 'prazos_perdidos': prazos_perdidos, 'acordos_homologados': acordos_homologados,
                     'faturamento': faturamento, 'recebido': recebido, 'vencido': vencido, 'rpv_precatorio': rpv_precatorio, 'pagamento_adm': pagamento_adm, 
                     'cs_contatos': cs_contatos, 'nps': nps, 'contatos_aniversariantes': contatos_aniversariantes, 'processos_arquivados': processos_arquivados,
+                    'indicacoes_solicitadas': indicacoes_solicitadas,
                     'clientes_aguard_judicial': clientes_aguard_judicial, 'clientes_aguard_adm': clientes_aguard_adm, 'avaliacoes_google': avaliacoes_google, 
                     'cancelados_desistencia': cancelados_desistencia, 'cancelados_docs_direito': cancelados_docs_direito,
                     'eq_comercial': eq_comercial, 'eq_financeiro': eq_financeiro, 'eq_cs': eq_cs, 'eq_adm': eq_adm, 'eq_judicial': eq_judicial
@@ -673,7 +678,7 @@ else:
         'judicial_recursos', 'judicial_rec_providos', 'judicial_rec_improvidos',
         'sentecas_proc', 'sentecas_improc', 'judicial_extinto', 'judicial_estoque', 'judicial_retrabalho', 'judicial_cancelados',
         'prazos_fatal', 'prazos_perdidos', 'acordos_homologados', 'faturamento', 'recebido', 'vencido', 'rpv_precatorio', 'pagamento_adm', 
-        'cs_contatos', 'nps', 'contatos_aniversariantes', 'processos_arquivados',
+        'cs_contatos', 'nps', 'contatos_aniversariantes', 'processos_arquivados', 'indicacoes_solicitadas',
         'clientes_aguard_judicial', 'clientes_aguard_adm', 'avaliacoes_google', 
         'cancelados_desistencia', 'cancelados_docs_direito',
         'eq_comercial', 'eq_financeiro', 'eq_cs', 'eq_adm', 'eq_judicial'
@@ -756,7 +761,7 @@ else:
         st.markdown("#### 4. Sucesso do Cliente & Qualidade")
         sc1, sc2, sc3, sc4 = st.columns(4, gap="medium")
         sc1.metric("NPS Médio", f"{totais_mes['nps']:.1f}")
-        sc2.metric("Aniversariantes Contatados", totais_mes['contatos_aniversariantes'])
+        sc2.metric("Indicações Solicitadas", totais_mes['indicacoes_solicitadas'])
         sc3.metric("Avaliações Google", totais_mes['avaliacoes_google'])
         sc4.metric("Processos Arquivados", totais_mes['processos_arquivados'])
 
